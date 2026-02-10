@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { MetricsCard } from "@/components/dashboard/metrics-cards"
 import { RecentActivity } from "@/components/dashboard/recent-activity"
 import { Briefcase, Users, FileCheck, Calendar } from "lucide-react"
+import Link from "next/link"
 
 async function getDashboardMetrics() {
     // In a real app, this would fetch from the DB
@@ -71,13 +72,16 @@ export default async function DashboardPage() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="grid gap-2">
-                        <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium leading-none">Post a New Job</p>
-                                <p className="text-sm text-muted-foreground">Create a listing and publish to boards.</p>
+                        <Link href="/dashboard/jobs/new">
+                            <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                                <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium leading-none">Post a New Job</p>
+                                    <p className="text-sm text-muted-foreground">Create a listing and publish to boards.</p>
+                                </div>
+                                <Briefcase className="h-4 w-4 text-muted-foreground" />
                             </div>
-                            <Briefcase className="h-4 w-4 text-muted-foreground" />
-                        </div>
+                        </Link>
+
                         <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                             <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium leading-none">Add Candidate</p>
@@ -85,6 +89,7 @@ export default async function DashboardPage() {
                             </div>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </div>
+
                         <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                             <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium leading-none">Schedule Interview</p>
