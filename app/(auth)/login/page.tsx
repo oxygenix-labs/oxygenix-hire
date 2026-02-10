@@ -1,4 +1,5 @@
 import Link from "next/link"
+import React, { Suspense } from 'react'
 import { LoginForm } from "@/components/auth/login-form"
 
 export default function LoginPage() {
@@ -44,7 +45,9 @@ export default function LoginPage() {
                             Enter your email and password below
                         </p>
                     </div>
-                    <LoginForm />
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <LoginForm />
+                    </Suspense>
                     <p className="px-8 text-center text-sm text-muted-foreground">
                         Don&apos;t have an account?{" "}
                         <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
