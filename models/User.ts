@@ -24,8 +24,12 @@ const UserSchema = new Schema(
         },
         role: {
             type: String,
-            enum: ['candidate', 'recruiter', 'admin'],
+            enum: ['owner', 'member', 'candidate', 'recruiter', 'admin'],
             default: 'candidate',
+        },
+        organizationId: {
+            type: Schema.Types.ObjectId,
+            ref: 'Organization',
         },
         image: {
             type: String,
