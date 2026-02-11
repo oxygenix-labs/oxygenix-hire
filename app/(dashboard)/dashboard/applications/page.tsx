@@ -15,19 +15,22 @@ async function getCandidates() {
         const user = await User.findOne({ email: session.user.email })
         if (!user || !user.organizationId) return []
 
-        const candidates = await Candidate.find({ organizationId: user.organizationId })
+        const rawCandidates = await Candidate.find({ organizationId: user.organizationId })
             .populate('jobId', 'title')
             .lean()
 
-        return candidates.map((c: any) => ({
-            _id: c._id.toString(),
-            firstName: c.firstName,
-            lastName: c.lastName,
-            email: c.email,
-            jobId: c.jobId ? { title: c.jobId.title } : null,
-            stage: c.stage,
-            updatedAt: c.updatedAt.toISOString(),
+        // Serialize and handle null jobs
+        const candidates = rawCandidates.map((candidate: any) => ({
+            _id: candidate._id.toString(),
+            firstName: candidate.firstName,
+            lastName: candidate.lastName,
+            email: candidate.email,
+            jobId: candidate.jobId ? { title: candidate.jobId.title } : { title: "Deleted Job" }, // Fallback
+            stage: candidate.stage,
+            updatedAt: candidate.updatedAt.toISOString(),
         }))
+
+        return candidates
     } catch (error) {
         console.error("Failed to fetch candidates", error)
         return []

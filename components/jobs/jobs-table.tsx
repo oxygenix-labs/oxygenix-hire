@@ -135,6 +135,9 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                             <DropdownMenuItem onClick={() => router.push(`/dashboard/jobs/${job._id}/edit`)}>
                                                 Edit Job
                                             </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => router.push(`/dashboard/jobs/${job._id}/workflow`)}>
+                                                Open Workflow
+                                            </DropdownMenuItem>
                                             {job.status !== "closed" && (
                                                 <DropdownMenuItem onClick={() => handleStatusChange(job._id, "closed")}>
                                                     Close Job

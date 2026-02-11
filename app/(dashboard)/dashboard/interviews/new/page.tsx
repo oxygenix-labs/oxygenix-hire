@@ -23,7 +23,8 @@ async function getCandidates() {
             _id: c._id.toString(),
             firstName: c.firstName,
             lastName: c.lastName,
-            jobId: c.jobId ? { _id: c.jobId._id.toString(), title: c.jobId.title } : null,
+            email: c.email,
+            jobId: c.jobId ? { _id: c.jobId._id.toString(), title: c.jobId.title } : { _id: "deleted", title: "Deleted Job" },
         }))
     } catch (error) {
         console.error("Failed to fetch candidates", error)

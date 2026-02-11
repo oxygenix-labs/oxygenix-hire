@@ -34,6 +34,38 @@ const JobSchema = new Schema(
             type: Number,
             default: 0,
         },
+        workflow: {
+            currentStep: { type: Number, default: 1 },
+            steps: {
+                jobDescription: {
+                    status: { type: String, enum: ['not_started', 'in_progress', 'completed'], default: 'not_started' },
+                    data: {
+                        description: { type: String },
+                        experienceLevel: { type: String },
+                        skills: { type: [String] },
+                        responsibilities: { type: String },
+                        companyContext: { type: String },
+                        selectedPrompt: { type: String }
+                    }
+                },
+                resumeScreening: {
+                    status: { type: String, enum: ['not_started', 'in_progress', 'completed'], default: 'not_started' },
+                    data: { type: Schema.Types.Mixed, default: {} }
+                },
+                interviewPlanning: {
+                    status: { type: String, enum: ['not_started', 'in_progress', 'completed'], default: 'not_started' },
+                    data: { type: Schema.Types.Mixed, default: {} }
+                },
+                hiringDecision: {
+                    status: { type: String, enum: ['not_started', 'in_progress', 'completed'], default: 'not_started' },
+                    data: { type: Schema.Types.Mixed, default: {} }
+                },
+                offer: {
+                    status: { type: String, enum: ['not_started', 'in_progress', 'completed'], default: 'not_started' },
+                    data: { type: Schema.Types.Mixed, default: {} }
+                }
+            }
+        },
     },
     {
         timestamps: true,

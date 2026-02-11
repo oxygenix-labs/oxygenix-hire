@@ -13,7 +13,7 @@ const updateCandidateSchema = z.object({
 
 export async function PATCH(
     req: Request,
-    { params }: { params: { candidateId: string } }
+    { params }: { params: Promise<{ candidateId: string }> }
 ) {
     try {
         const session = await auth()

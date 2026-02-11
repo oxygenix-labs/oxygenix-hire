@@ -57,8 +57,8 @@ export function SignupForm() {
                 throw new Error(result.error || "Something went wrong")
             }
 
-            // Redirect to login (or dashboard if we had auto-login)
-            router.push("/login?registered=true")
+            // Redirect to create job page
+            router.push("/dashboard/jobs/new")
         } catch (err) {
             if (err instanceof Error) {
                 setError(err.message)

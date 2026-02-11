@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import connectToDatabase from '@/lib/db';
 import User from '@/models/User';
 import Organization from '@/models/Organization';
+import Membership from '@/models/Membership';
 import { z } from 'zod';
 
 const signupSchema = z.object({
@@ -39,18 +40,25 @@ export async function POST(req: Request) {
             trialEndsAt,
         });
 
-        // Create User linked to Organization
+        // Create User linked to Organization (Default context)
         const user = await User.create({
             name: validatedData.name,
             email: validatedData.email,
             password: hashedPassword,
-            role: 'owner', // First user is the owner
-            organizationId: organization._id,
+            role: 'owner', // System role
+            organizationId: organization._id, // Default active org
             companyName: validatedData.companyName,
-            onboardingCompleted: true, // Skip onboarding for now
+            onboardingCompleted: true,
         });
 
-        // Add user to organization members
+        // Create Admin Membership
+        await Membership.create({
+            userId: user._id,
+            organizationId: organization._id,
+            role: 'owner',
+        });
+
+        // Add user to organization members array (legacy support / quick access)
         organization.members.push(user._id);
         await organization.save();
 
@@ -60,7 +68,6 @@ export async function POST(req: Request) {
         );
     } catch (error: any) {
         console.error('Signup error:', error);
-        // Check if it's a Zod error by checking for .errors property safely
         if (error && typeof error === 'object' && 'errors' in error && Array.isArray(error.errors)) {
             const errorMessage = error.errors[0]?.message || 'Validation error';
             return NextResponse.json(
