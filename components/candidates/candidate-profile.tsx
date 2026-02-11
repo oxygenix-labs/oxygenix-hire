@@ -109,6 +109,32 @@ export function CandidateProfileSheet({ candidate, open, onOpenChange }: Candida
                         </Button>
                     </div>
 
+                    <Separator />
+
+                    <div className="pt-2 flex flex-col gap-2">
+                        <Button
+                            className="w-full"
+                            onClick={() => {
+                                onOpenChange(false)
+                                router.push(`/dashboard/candidates/${candidate._id}/offer`)
+                            }}
+                            variant="secondary"
+                            disabled={candidate.stage === "Rejected" || candidate.stage === "Hired"}
+                        >
+                            Prepare Offer
+                        </Button>
+                        <Button
+                            className="w-full"
+                            onClick={() => {
+                                onOpenChange(false)
+                                router.push(`/dashboard/candidates/${candidate._id}/decision`)
+                            }}
+                            disabled={candidate.stage === "Hired" || candidate.stage === "Rejected"}
+                        >
+                            Make Final Decision
+                        </Button>
+                    </div>
+
                 </div>
             </SheetContent>
         </Sheet>
