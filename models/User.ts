@@ -50,6 +50,19 @@ const UserSchema = new Schema(
             type: Boolean,
             default: false,
         },
+        timezone: {
+            type: String,
+            default: 'UTC',
+        },
+        notificationPreferences: {
+            newApplication: { type: Boolean, default: true },
+            interviewScheduled: { type: Boolean, default: true },
+            offerAccepted: { type: Boolean, default: true },
+        },
+        twoFactorEnabled: {
+            type: Boolean,
+            default: false,
+        },
     },
     {
         timestamps: true,

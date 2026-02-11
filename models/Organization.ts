@@ -7,6 +7,10 @@ const OrganizationSchema = new Schema(
             required: [true, 'Please provide an organization name'],
             maxlength: [100, 'Name cannot be more than 100 characters'],
         },
+        logoUrl: { type: String },
+        website: { type: String },
+        industry: { type: String },
+        companySize: { type: String },
         plan: {
             type: String,
             enum: ['free_trial', 'pro', 'team', 'enterprise'],
