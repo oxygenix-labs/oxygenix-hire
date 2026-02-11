@@ -1,16 +1,17 @@
 import { auth } from "@/lib/auth"
 import connectToDatabase from "@/lib/db"
-import Job from "@/models/Job"
-import User from "@/models/User" // We need User to get organizationId if not in session
+import Candidate from "@/models/Candidate"
+import Job from "@/models/Job" // Ensure Job model is registered
+import User from "@/models/User"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
-const createJobSchema = z.object({
-    title: z.string().min(2),
-    type: z.string(),
-    location: z.string(),
-    status: z.string(),
-    description: z.string(),
+const createCandidateSchema = z.object({
+    firstName: z.string().min(2),
+    lastName: z.string().min(2),
+    email: z.string().email(),
+    jobId: z.string(),
+    stage: z.string().optional(),
 })
 
 export async function POST(req: Request) {
@@ -22,29 +23,28 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json()
-        const { title, type, location, status, description } = createJobSchema.parse(body)
+        const { firstName, lastName, email, jobId, stage } = createCandidateSchema.parse(body)
 
         await connectToDatabase()
 
-        // Fetch user to get organizationId
         const user = await User.findOne({ email: session.user.email })
 
         if (!user || !user.organizationId) {
-            return new NextResponse("User must belong to an organization to post jobs", { status: 403 })
+            return new NextResponse("User must belong to an organization", { status: 403 })
         }
 
-        const job = await Job.create({
-            title,
-            type,
-            location,
-            status,
-            description,
+        const candidate = await Candidate.create({
+            firstName,
+            lastName,
+            email,
+            jobId,
             organizationId: user.organizationId,
+            stage: stage || 'Applied',
         })
 
-        return NextResponse.json(job)
+        return NextResponse.json(candidate)
     } catch (error) {
-        console.error("[JOBS_POST]", error)
+        console.error("[CANDIDATES_POST]", error)
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
@@ -58,7 +58,8 @@ export async function GET(req: Request) {
         }
 
         const { searchParams } = new URL(req.url)
-        const status = searchParams.get("status")
+        const jobId = searchParams.get("jobId")
+        const stage = searchParams.get("stage")
         const page = parseInt(searchParams.get("page") || "1")
         const limit = parseInt(searchParams.get("limit") || "10")
         const skip = (page - 1) * limit
@@ -67,23 +68,27 @@ export async function GET(req: Request) {
 
         const user = await User.findOne({ email: session.user.email })
         if (!user || !user.organizationId) {
-            return new NextResponse("User or Organization not found", { status: 404 })
+            return new NextResponse("User not found", { status: 404 })
         }
 
         const query: any = { organizationId: user.organizationId }
-        if (status && status !== "all") {
-            query.status = status
+        if (jobId && jobId !== "all") {
+            query.jobId = jobId
+        }
+        if (stage && stage !== "all") {
+            query.stage = stage
         }
 
-        const jobs = await Job.find(query)
-            .sort({ createdAt: -1 }) // Newest first
+        const candidates = await Candidate.find(query)
+            .populate('jobId', 'title') // Populate job details
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 
-        const total = await Job.countDocuments(query)
+        const total = await Candidate.countDocuments(query)
 
         return NextResponse.json({
-            jobs,
+            candidates,
             pagination: {
                 total,
                 page,
@@ -93,7 +98,7 @@ export async function GET(req: Request) {
         })
 
     } catch (error) {
-        console.error("[JOBS_GET]", error)
+        console.error("[CANDIDATES_GET]", error)
         return new NextResponse("Internal Error", { status: 500 })
     }
 }
