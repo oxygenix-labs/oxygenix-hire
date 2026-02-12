@@ -11,11 +11,8 @@ import {
     useSensor,
     useSensors,
 } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
 import { KanbanColumn } from "./kanban-column";
 import { KanbanCard } from "./kanban-card";
-import { useRouter } from "next/navigation";
-
 interface Candidate {
     _id: string;
     firstName: string;
@@ -35,8 +32,6 @@ const STAGES = ["Applied", "Screening", "Interview", "Offer", "Hired", "Rejected
 export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
     const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
     const [activeCandidate, setActiveCandidate] = useState<Candidate | null>(null);
-    const router = useRouter();
-
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: {
@@ -75,13 +70,14 @@ export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
         if (isActiveTask && isOverColumn) {
             setCandidates((candidates) => {
                 const activeIndex = candidates.findIndex((t) => t._id === activeId);
+                if (activeIndex === -1) return candidates;
 
                 // Optimistically update stage locally
                 const newStage = overId as string;
-                if (candidates[activeIndex].stage !== newStage) {
+                if (candidates[activeIndex]!.stage !== newStage) {
                     const newCandidates = [...candidates];
                     newCandidates[activeIndex] = {
-                        ...newCandidates[activeIndex],
+                        ...newCandidates[activeIndex]!,
                         stage: newStage,
                     };
                     return newCandidates;

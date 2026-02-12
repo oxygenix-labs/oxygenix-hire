@@ -1,29 +1,19 @@
 import { auth } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import Job from "@/models/Job";
-import User from "@/models/User";
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
-const updateJobSchema = z.object({
-    title: z.string().min(2).optional(),
-    type: z.string().optional(),
-    location: z.string().optional(),
-    status: z.string().optional(),
-    description: z.string().min(10).optional(),
-});
-
-export async function GET(req: Request, { params }: { params: Promise<{ jobId: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ jobId: string }> }) {
     try {
         const session = await auth();
         if (!session?.user?.email) return new NextResponse("Unauthorized", { status: 401 });
 
         await connectToDatabase();
         const User = (await import("@/models/User")).default;
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         const { jobId } = await params;
-        const job = await Job.findById(jobId);
+        const job = await (Job.findById as any)(jobId);
 
         if (!job) return new NextResponse("Job not found", { status: 404 });
 
@@ -49,10 +39,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ jobId:
 
         await connectToDatabase();
         const User = (await import("@/models/User")).default;
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         const { jobId } = await params;
-        const job = await Job.findById(jobId);
+        const job = await (Job.findById as any)(jobId);
 
         if (!job) return new NextResponse("Job not found", { status: 404 });
 
@@ -75,17 +65,17 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ jobId:
     }
 }
 
-export async function DELETE(req: Request, { params }: { params: Promise<{ jobId: string }> }) {
+export async function DELETE(_req: Request, { params }: { params: Promise<{ jobId: string }> }) {
     try {
         const session = await auth();
         if (!session?.user?.email) return new NextResponse("Unauthorized", { status: 401 });
 
         await connectToDatabase();
         const User = (await import("@/models/User")).default;
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         const { jobId } = await params;
-        const job = await Job.findById(jobId);
+        const job = await (Job.findById as any)(jobId);
 
         if (!job) return new NextResponse("Job not found", { status: 404 });
 
@@ -93,7 +83,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ jobId
             return new NextResponse("Forbidden", { status: 403 });
         }
 
-        await Job.findByIdAndDelete(jobId);
+        await (Job.findByIdAndDelete as any)(jobId);
 
         return new NextResponse("Job deleted", { status: 200 });
     } catch (error) {

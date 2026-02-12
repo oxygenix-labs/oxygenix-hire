@@ -9,7 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Check, CreditCard, Zap } from "lucide-react";
+import { Check, Zap } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 export default function BillingPage() {

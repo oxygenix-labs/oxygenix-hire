@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
-import { redirect } from "next/navigation";
-
 async function getJobs() {
     // In a real Server Component, we can fetch directly from DB or call an internal API helper
     // Calling the API route via full URL in server components is often tricky with absolute URLs
@@ -18,16 +16,19 @@ async function getJobs() {
         const session = await auth();
         if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default;
-        const Job = (await import("@/models/Job")).default;
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job;
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return [];
 
         // Fetch all jobs for now, sorting by newest
-        const jobs = await Job.find({ organizationId: user.organizationId })
+        const jobs = await _Job
+            .find({ organizationId: user.organizationId } as any)
             .sort({ createdAt: -1 })
             .lean(); // Plain JS objects
 

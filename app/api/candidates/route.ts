@@ -1,7 +1,6 @@
 import { auth } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import Candidate from "@/models/Candidate";
-import Job from "@/models/Job"; // Ensure Job model is registered
 import User from "@/models/User";
 import { NextResponse } from "next/server";
 import { z } from "zod";
@@ -27,7 +26,7 @@ export async function POST(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         if (!user || !user.organizationId) {
             return new NextResponse("User must belong to an organization", { status: 403 });
@@ -66,7 +65,7 @@ export async function GET(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("User not found", { status: 404 });
         }

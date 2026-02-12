@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("Forbidden", { status: 403 });
         }
@@ -49,14 +49,14 @@ export async function POST(req: Request) {
         const candidate = await Candidate.findOne({
             _id: candidateId,
             organizationId: user.organizationId,
-        });
+        } as any);
         if (!candidate) {
             return new NextResponse("Candidate not found", { status: 404 });
         }
 
         // Upsert Offer (Replace draft if exists)
         // Find existing offer for this candidate
-        let offer = await Offer.findOne({ candidateId });
+        let offer = await Offer.findOne({ candidateId } as any);
 
         if (offer) {
             // Update

@@ -7,20 +7,25 @@ async function getCandidate(candidateId: string) {
         const session = await auth();
         if (!session?.user?.email) return null;
 
-        const User = (await import("@/models/User")).default;
-        const Candidate = (await import("@/models/Candidate")).default;
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Candidate = (await import("@/models/Candidate")).default;
+        void _Candidate;
         // Load Job for population just in case, though not strictly needed here
-        const Job = (await import("@/models/Job")).default;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job;
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return null;
 
-        const candidate = await Candidate.findOne({
-            _id: candidateId,
-            organizationId: user.organizationId,
-        }).lean();
+        const candidate = await _Candidate
+            .findOne({
+                _id: candidateId,
+                organizationId: user.organizationId,
+            } as any)
+            .lean();
 
         if (!candidate) return null;
 

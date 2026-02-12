@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         await connectToDatabase();
 
         // Get Actor
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("Forbidden", { status: 403 });
         }
@@ -39,13 +39,13 @@ export async function POST(req: Request) {
         const candidate = await Candidate.findOne({
             _id: candidateId,
             organizationId: user.organizationId,
-        });
+        } as any);
         if (!candidate) {
             return new NextResponse("Candidate not found", { status: 404 });
         }
 
         // Check if decision already exists
-        const existingDecision = await Decision.findOne({ candidateId });
+        const existingDecision = await (Decision.findOne as any)({ candidateId });
         if (existingDecision) {
             return new NextResponse("Decision already made for this candidate", { status: 409 });
         }

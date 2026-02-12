@@ -16,8 +16,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 const securityFormSchema = z
     .object({
         currentPassword: z.string().min(6),
@@ -43,7 +41,7 @@ export function SecurityForm() {
         },
     });
 
-    async function onSubmit(data: SecurityFormValues) {
+    async function onSubmit(_data: SecurityFormValues) {
         setIsLoading(true);
         // Mock API
         setTimeout(() => {

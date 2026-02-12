@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Plus, Calendar, Clock, User as UserIcon } from "lucide-react";
+import { Plus, Calendar, Clock } from "lucide-react";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,18 +10,23 @@ async function getInterviews() {
         const session = await auth();
         if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default;
-        const Interview = (await import("@/models/Interview")).default;
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Interview = (await import("@/models/Interview")).default;
+        void _Interview;
         // Populate
-        const Candidate = (await import("@/models/Candidate")).default;
-        const Job = (await import("@/models/Job")).default;
+        const _Candidate = (await import("@/models/Candidate")).default;
+        void _Candidate;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job;
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return [];
 
-        const interviews = await Interview.find({ organizationId: user.organizationId })
+        const interviews = await _Interview
+            .find({ organizationId: user.organizationId } as any)
             .populate("candidateId", "firstName lastName email")
             .populate("jobId", "title")
             .sort({ createdAt: -1 })

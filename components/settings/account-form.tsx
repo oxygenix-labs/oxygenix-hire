@@ -41,11 +41,6 @@ const accountFormSchema = z.object({
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
 // This can come from your database or API.
-const defaultValues: Partial<AccountFormValues> = {
-    // name: "Your Name",
-    // dob: new Date("2023-01-23"),
-};
-
 interface AccountFormProps {
     user: {
         name: string;

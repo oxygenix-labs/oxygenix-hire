@@ -8,17 +8,17 @@ import { z } from "zod";
 import { randomBytes } from "crypto";
 
 // GET: List Members & Invitations
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
     try {
         const session = await auth();
         if (!session?.user?.email) return new NextResponse("Unauthorized", { status: 401 });
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return new NextResponse("Forbidden", { status: 403 });
 
         // Get Members
-        const members = await User.find({ organizationId: user.organizationId })
+        const members = await User.find({ organizationId: user.organizationId } as any)
             .select("name email role image createdAt")
             .sort({ createdAt: -1 });
 
@@ -26,7 +26,7 @@ export async function GET(req: Request) {
         const invitations = await Invitation.find({
             organizationId: user.organizationId,
             status: "pending",
-        }).sort({ createdAt: -1 });
+        } as any).sort({ createdAt: -1 });
 
         return NextResponse.json({ members, invitations });
     } catch (error) {
@@ -50,11 +50,14 @@ export async function POST(req: Request) {
         const { email, role } = inviteSchema.parse(body);
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return new NextResponse("Forbidden", { status: 403 });
 
         // Check if user already exists in org
-        const existingMember = await User.findOne({ email, organizationId: user.organizationId });
+        const existingMember = await User.findOne({
+            email,
+            organizationId: user.organizationId,
+        } as any);
         if (existingMember) {
             return new NextResponse("User is already a member", { status: 409 });
         }
@@ -64,7 +67,7 @@ export async function POST(req: Request) {
             email,
             organizationId: user.organizationId,
             status: "pending",
-        });
+        } as any);
         if (existingInvite) {
             return new NextResponse("Invitation already sent", { status: 409 });
         }
@@ -105,7 +108,7 @@ export async function DELETE(req: Request) {
         if (!memberId) return new NextResponse("Member ID required", { status: 400 });
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return new NextResponse("Forbidden", { status: 403 });
 
         // Prevent removing self
@@ -114,15 +117,19 @@ export async function DELETE(req: Request) {
         }
 
         // Remove from Org (set orgId to null)
-        await User.findByIdAndUpdate(memberId, {
+        await (User.findByIdAndUpdate as any)(memberId, {
             $unset: { organizationId: 1 },
             role: "candidate", // Reset role or handle as needed
         });
 
         // Also remove from Organization.members array if we were syncing it
-        await Organization.findByIdAndUpdate(user.organizationId, {
-            $pull: { members: memberId },
-        });
+        await (Organization.findByIdAndUpdate as any)(
+            user.organizationId,
+            {
+                $pull: { members: memberId },
+            },
+            {}
+        );
 
         return new NextResponse("Member removed", { status: 200 });
     } catch (error) {

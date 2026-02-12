@@ -6,16 +6,20 @@ async function getCandidates() {
         const session = await auth();
         if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default;
-        const Candidate = (await import("@/models/Candidate")).default;
-        const Job = (await import("@/models/Job")).default; // Load for Population
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Candidate = (await import("@/models/Candidate")).default;
+        void _Candidate;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job; // Load for Population
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return [];
 
-        const rawCandidates = await Candidate.find({ organizationId: user.organizationId })
+        const rawCandidates = await _Candidate
+            .find({ organizationId: user.organizationId } as any)
             .populate("jobId", "title")
             .lean();
 

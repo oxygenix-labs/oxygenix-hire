@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -33,7 +32,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, Sparkles, Wand2, Check, ExternalLink, Cpu, Eye } from "lucide-react";
+import { Loader2, Sparkles, Wand2, Check, Cpu, Eye } from "lucide-react";
 import { Editor } from "@/components/ui/editor";
 import { toast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";

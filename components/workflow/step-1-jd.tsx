@@ -13,7 +13,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 import {
     Select,
@@ -22,14 +21,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Wand2, ArrowRight, Check, Sparkles } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
@@ -73,7 +65,7 @@ export function Step1JobDescription({ jobId, initialData, onComplete }: Step1Pro
     // Form State
     const [jobTitle, setJobTitle] = useState(initialData?.title || ""); // Ideally fetched from Job, but editable here for context
     const [employmentType, setEmploymentType] = useState(initialData?.type || "Full-time");
-    const [location, setLocation] = useState(initialData?.location || "Remote");
+    const [location] = useState(initialData?.location || "Remote");
     const [experienceLevel, setExperienceLevel] = useState(
         initialData?.workflow?.steps?.jobDescription?.data?.experienceLevel || "Mid-Level"
     );

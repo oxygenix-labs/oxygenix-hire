@@ -13,8 +13,7 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, XCircle, BrainCircuit, Lock } from "lucide-react";
+import { CheckCircle, XCircle, BrainCircuit, Lock } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogAction,

@@ -28,7 +28,7 @@ export async function PATCH(
         await connectToDatabase();
 
         // Get current user (actor)
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("Forbidden", { status: 403 });
         }
@@ -37,7 +37,7 @@ export async function PATCH(
         const candidate = await Candidate.findOne({
             _id: candidateId,
             organizationId: user.organizationId,
-        });
+        } as any);
         if (!candidate) {
             return new NextResponse("Candidate not found", { status: 404 });
         }

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Briefcase, Users, MessageSquare, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, MessageSquare, Settings } from "lucide-react";
 
 const sidebarLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },

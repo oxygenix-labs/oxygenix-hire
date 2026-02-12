@@ -25,7 +25,7 @@ export async function PATCH(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("Forbidden", { status: 403 });
         }
@@ -33,7 +33,7 @@ export async function PATCH(req: Request) {
         const updatedOrg = await Organization.findByIdAndUpdate(
             user.organizationId,
             { name, industry, companySize, website },
-            { new: true }
+            { new: true } as any
         );
 
         return NextResponse.json(updatedOrg);

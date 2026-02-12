@@ -6,11 +6,12 @@ async function getUser() {
     const session = await auth();
     if (!session?.user?.email) return null;
 
-    const User = (await import("@/models/User")).default;
+    const _User = (await import("@/models/User")).default;
+    void _User; // Load for population
     const connectToDatabase = (await import("@/lib/db")).default;
     await connectToDatabase();
 
-    const user = await User.findOne({ email: session.user.email }).lean();
+    const user = await (_User.findOne as any)({ email: session.user.email }).lean();
     if (!user) return null;
 
     return {

@@ -2,8 +2,6 @@ import { auth } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
 import Interview from "@/models/Interview";
 import User from "@/models/User";
-import Candidate from "@/models/Candidate"; // Ensure loaded
-import Job from "@/models/Job"; // Ensure loaded
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -30,7 +28,7 @@ export async function POST(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         if (!user || !user.organizationId) {
             return new NextResponse("User must belong to an organization", { status: 403 });
@@ -53,7 +51,7 @@ export async function POST(req: Request) {
     }
 }
 
-export async function GET(req: Request) {
+export async function GET(_req: Request) {
     try {
         const session = await auth();
         if (!session?.user?.email) {
@@ -61,12 +59,12 @@ export async function GET(req: Request) {
         }
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("User not found", { status: 404 });
         }
 
-        const interviews = await Interview.find({ organizationId: user.organizationId })
+        const interviews = await Interview.find({ organizationId: user.organizationId } as any)
             .populate("candidateId", "firstName lastName")
             .populate("jobId", "title")
             .sort({ createdAt: -1 })

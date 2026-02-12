@@ -7,26 +7,31 @@ async function getData(candidateId: string) {
         const session = await auth();
         if (!session?.user?.email) return null;
 
-        const User = (await import("@/models/User")).default;
-        const Candidate = (await import("@/models/Candidate")).default;
-        const Offer = (await import("@/models/Offer")).default;
-        const Job = (await import("@/models/Job")).default;
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Candidate = (await import("@/models/Candidate")).default;
+        void _Candidate;
+        const _Offer = (await import("@/models/Offer")).default;
+        void _Offer;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job;
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return null;
 
-        const candidate = await Candidate.findOne({
-            _id: candidateId,
-            organizationId: user.organizationId,
-        })
+        const candidate = await _Candidate
+            .findOne({
+                _id: candidateId,
+                organizationId: user.organizationId,
+            } as any)
             .populate("jobId", "title")
             .lean();
 
         if (!candidate) return null;
 
-        const existingOffer = await Offer.findOne({ candidateId: candidate._id }).lean();
+        const existingOffer = await (_Offer.findOne as any)({ candidateId: candidate._id }).lean();
 
         return {
             candidate: {

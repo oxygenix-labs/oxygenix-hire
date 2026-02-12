@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 // GET: Fetch Workflow State
-export async function GET(req: Request, { params }: { params: Promise<{ jobId: string }> }) {
+export async function GET(_req: Request, { params }: { params: Promise<{ jobId: string }> }) {
     try {
         const session = await auth();
         if (!session?.user?.email) return new NextResponse("Unauthorized", { status: 401 });
@@ -13,10 +13,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ jobId: s
         await connectToDatabase();
         // Ensure user has access to this job's org
         const User = (await import("@/models/User")).default;
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         const { jobId } = await params;
-        const job = await Job.findById(jobId);
+        const job = await (Job.findById as any)(jobId);
 
         if (!job) return new NextResponse("Job not found", { status: 404 });
 
@@ -56,10 +56,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ jobId:
 
         await connectToDatabase();
         const User = (await import("@/models/User")).default;
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         const { jobId } = await params;
-        const job = await Job.findById(jobId);
+        const job = await (Job.findById as any)(jobId);
         if (!job) return new NextResponse("Job not found", { status: 404 });
 
         if (job.organizationId.toString() !== user.organizationId?.toString()) {

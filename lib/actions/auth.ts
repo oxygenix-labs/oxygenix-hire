@@ -3,7 +3,7 @@
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
 
-export async function authenticate(prevState: string | undefined, formData: FormData) {
+export async function authenticate(_prevState: string | undefined, formData: FormData) {
     try {
         await signIn("credentials", {
             redirect: true,

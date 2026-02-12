@@ -66,7 +66,7 @@ export function Editor({ value, onChange, placeholder }: EditorProps) {
       </ul>
       `,
         ];
-        const randomTemplate = templates[Math.floor(Math.random() * templates.length)];
+        const randomTemplate = templates[Math.floor(Math.random() * templates.length)]!;
         editor.commands.setContent(randomTemplate);
         onChange(randomTemplate);
     };

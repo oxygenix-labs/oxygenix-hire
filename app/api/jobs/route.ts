@@ -27,7 +27,7 @@ export async function POST(req: Request) {
         await connectToDatabase();
 
         // Fetch user to get organizationId
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
 
         if (!user || !user.organizationId) {
             return new NextResponse("User must belong to an organization to post jobs", {
@@ -67,7 +67,7 @@ export async function GET(req: Request) {
 
         await connectToDatabase();
 
-        const user = await User.findOne({ email: session.user.email });
+        const user = await User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) {
             return new NextResponse("User or Organization not found", { status: 404 });
         }

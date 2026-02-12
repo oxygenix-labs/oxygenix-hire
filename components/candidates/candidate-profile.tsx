@@ -11,13 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Mail, Briefcase, Clock, FileText } from "lucide-react";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -39,27 +32,9 @@ interface CandidateProfileProps {
 
 export function CandidateProfileSheet({ candidate, open, onOpenChange }: CandidateProfileProps) {
     const router = useRouter();
-    const [isLoading, setIsLoading] = useState(false);
+    const [,] = useState(false);
 
     if (!candidate) return null;
-
-    const handleStageChange = async (newStage: string) => {
-        setIsLoading(true);
-        try {
-            // We need a PATCH route for individual candidates.
-            // Assuming /api/candidates/[id] exists or we implement it.
-            // For now, let's just log it. in a real app create the route.
-            console.log("Updating stage to", newStage);
-
-            // Create the route or update this logic when route exists.
-            // Simulating update for UI feedback
-            router.refresh();
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     return (
         <Sheet open={open} onOpenChange={onOpenChange}>

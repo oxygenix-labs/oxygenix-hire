@@ -23,9 +23,9 @@ export async function PATCH(req: Request) {
         await connectToDatabase();
 
         const updatedUser = await User.findOneAndUpdate(
-            { email: session.user.email },
+            { email: session.user.email } as any,
             { name, timezone },
-            { new: true }
+            { new: true, upsert: false } as any
         );
 
         return NextResponse.json(updatedUser);

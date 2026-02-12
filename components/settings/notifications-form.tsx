@@ -12,13 +12,10 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "@/components/ui/use-toast";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 const notificationsFormSchema = z.object({
     newApplication: z.boolean().default(false).optional(),
     interviewScheduled: z.boolean().default(false).optional(),
@@ -29,7 +26,6 @@ const notificationsFormSchema = z.object({
 type NotificationsFormValues = z.infer<typeof notificationsFormSchema>;
 
 export function NotificationsForm() {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<NotificationsFormValues>({

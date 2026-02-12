@@ -3,7 +3,6 @@
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { useDroppable } from "@dnd-kit/core";
 import { KanbanCard } from "./kanban-card";
-import { cn } from "@/lib/utils";
 
 interface Candidate {
     _id: string;

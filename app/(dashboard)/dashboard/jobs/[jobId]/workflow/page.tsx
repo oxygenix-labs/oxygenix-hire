@@ -1,6 +1,5 @@
 import { auth } from "@/lib/auth";
 import connectToDatabase from "@/lib/db";
-import Job from "@/models/Job";
 import { redirect } from "next/navigation";
 import { WorkflowClient } from "@/components/workflow/workflow-client";
 
@@ -9,10 +8,13 @@ async function getJobWorkflow(jobId: string) {
     if (!session?.user?.email) return null;
 
     await connectToDatabase();
-    const User = (await import("@/models/User")).default;
-    const user = await User.findOne({ email: session.user.email });
+    const _User = (await import("@/models/User")).default;
+    void _User;
+    const _Job = (await import("@/models/Job")).default;
+    void _Job;
+    const user = await _User.findOne({ email: session.user.email } as any);
 
-    const job = await Job.findById(jobId);
+    const job = await (_Job.findById as any)(jobId);
     if (!job || job.organizationId.toString() !== user.organizationId?.toString()) {
         return null;
     }

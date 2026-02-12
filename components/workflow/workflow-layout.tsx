@@ -1,10 +1,7 @@
 "use client";
 
-import { Check, ChevronRight, Lock } from "lucide-react";
+import { Check, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-
 interface WorkflowLayoutProps {
     currentStep: number; // 1-5
     jobId: string;
@@ -19,9 +16,7 @@ const steps = [
     { number: 5, title: "Offer & Close", id: "offer" },
 ];
 
-export function WorkflowLayout({ currentStep, jobId, children }: WorkflowLayoutProps) {
-    const pathname = usePathname();
-
+export function WorkflowLayout({ currentStep, children }: WorkflowLayoutProps) {
     return (
         <div className="flex flex-col space-y-8 p-8">
             {/* Stepper Header */}

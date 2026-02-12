@@ -1,24 +1,25 @@
 import { CandidatesTable } from "@/components/candidates/candidates-table";
-import { Button } from "@/components/ui/button";
 import { auth } from "@/lib/auth";
-import Link from "next/link";
-
 async function getCandidates() {
     try {
         const session = await auth();
         if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default;
-        const Candidate = (await import("@/models/Candidate")).default;
+        const _User = (await import("@/models/User")).default;
+        void _User;
+        const _Candidate = (await import("@/models/Candidate")).default;
+        void _Candidate;
         // Ensure Job model is loaded for population
-        const Job = (await import("@/models/Job")).default;
+        const _Job = (await import("@/models/Job")).default;
+        void _Job;
         const connectToDatabase = (await import("@/lib/db")).default;
 
         await connectToDatabase();
-        const user = await User.findOne({ email: session.user.email });
+        const user = await _User.findOne({ email: session.user.email } as any);
         if (!user || !user.organizationId) return [];
 
-        const candidates = await Candidate.find({ organizationId: user.organizationId })
+        const candidates = await _Candidate
+            .find({ organizationId: user.organizationId } as any)
             .populate("jobId", "title")
             .sort({ createdAt: -1 })
             .lean();

@@ -9,7 +9,7 @@ import connectToDatabase from "@/lib/db";
 async function getUser(email: string) {
     try {
         await connectToDatabase();
-        const user = await User.findOne({ email }).select("+password");
+        const user = await User.findOne({ email } as any).select("+password");
         return user;
     } catch (error) {
         console.error("Failed to fetch user:", error);
