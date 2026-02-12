@@ -1,31 +1,31 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Check, Loader2, X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Check, Loader2, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const signupSchema = z.object({
     name: z.string().min(2, "Full name must be at least 2 characters"),
     email: z.string().email("Please enter a valid work email"),
     companyName: z.string().min(2, "Company name must be at least 2 characters"),
     password: z.string().min(8, "Password must be at least 8 characters"),
-    terms: z.boolean().refine(val => val === true, "You must accept the terms"),
-})
+    terms: z.boolean().refine((val) => val === true, "You must accept the terms"),
+});
 
-type SignupFormValues = z.infer<typeof signupSchema>
+type SignupFormValues = z.infer<typeof signupSchema>;
 
 export function SignupForm() {
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const form = useForm<SignupFormValues>({
         resolver: zodResolver(signupSchema),
@@ -36,50 +36,49 @@ export function SignupForm() {
             password: "",
             terms: false,
         },
-    })
+    });
 
     // Watch password for strength indicator
-    const password = form.watch("password")
+    const password = form.watch("password");
 
     async function onSubmit(data: SignupFormValues) {
-        setIsLoading(true)
-        setError(null)
+        setIsLoading(true);
+        setError(null);
 
         try {
             const response = await fetch("/api/auth/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
-            })
+            });
 
             if (!response.ok) {
-                const result = await response.json()
-                throw new Error(result.error || "Something went wrong")
+                const result = await response.json();
+                throw new Error(result.error || "Something went wrong");
             }
 
             // Redirect to create job page
-            router.push("/dashboard/jobs/new")
+            router.push("/dashboard/jobs/new");
         } catch (err) {
             if (err instanceof Error) {
-                setError(err.message)
+                setError(err.message);
             } else {
-                setError("An unpredictable error occurred")
+                setError("An unpredictable error occurred");
             }
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
     // Password strength checker
-    const hasMinLength = password?.length >= 8
-    const hasNumber = /\d/.test(password || "")
-    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password || "")
+    const hasMinLength = password?.length >= 8;
+    const hasNumber = /\d/.test(password || "");
+    const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(password || "");
 
     return (
         <div className="grid gap-6">
             <form onSubmit={form.handleSubmit(onSubmit)}>
                 <div className="grid gap-4">
-
                     {/* Full Name */}
                     <div className="grid gap-2">
                         <Label htmlFor="name">Full Name</Label>
@@ -91,10 +90,15 @@ export function SignupForm() {
                             autoCorrect="off"
                             disabled={isLoading}
                             {...form.register("name")}
-                            className={cn(form.formState.errors.name && "border-red-500 focus-visible:ring-red-500")}
+                            className={cn(
+                                form.formState.errors.name &&
+                                    "border-red-500 focus-visible:ring-red-500"
+                            )}
                         />
                         {form.formState.errors.name && (
-                            <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
+                            <p className="text-sm text-red-500">
+                                {form.formState.errors.name.message}
+                            </p>
                         )}
                     </div>
 
@@ -110,10 +114,15 @@ export function SignupForm() {
                             autoCorrect="off"
                             disabled={isLoading}
                             {...form.register("email")}
-                            className={cn(form.formState.errors.email && "border-red-500 focus-visible:ring-red-500")}
+                            className={cn(
+                                form.formState.errors.email &&
+                                    "border-red-500 focus-visible:ring-red-500"
+                            )}
                         />
                         {form.formState.errors.email && (
-                            <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+                            <p className="text-sm text-red-500">
+                                {form.formState.errors.email.message}
+                            </p>
                         )}
                     </div>
 
@@ -128,10 +137,15 @@ export function SignupForm() {
                             autoCorrect="off"
                             disabled={isLoading}
                             {...form.register("companyName")}
-                            className={cn(form.formState.errors.companyName && "border-red-500 focus-visible:ring-red-500")}
+                            className={cn(
+                                form.formState.errors.companyName &&
+                                    "border-red-500 focus-visible:ring-red-500"
+                            )}
                         />
                         {form.formState.errors.companyName && (
-                            <p className="text-sm text-red-500">{form.formState.errors.companyName.message}</p>
+                            <p className="text-sm text-red-500">
+                                {form.formState.errors.companyName.message}
+                            </p>
                         )}
                     </div>
 
@@ -146,24 +160,56 @@ export function SignupForm() {
                             autoCorrect="off"
                             disabled={isLoading}
                             {...form.register("password")}
-                            className={cn(form.formState.errors.password && "border-red-500 focus-visible:ring-red-500")}
+                            className={cn(
+                                form.formState.errors.password &&
+                                    "border-red-500 focus-visible:ring-red-500"
+                            )}
                         />
                         {form.formState.errors.password && (
-                            <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+                            <p className="text-sm text-red-500">
+                                {form.formState.errors.password.message}
+                            </p>
                         )}
 
                         {/* Validations */}
                         <div className="flex flex-wrap gap-2 mt-1 text-xs text-muted-foreground">
-                            <div className={cn("flex items-center gap-1", hasMinLength ? "text-green-600" : "")}>
-                                {hasMinLength ? <Check className="w-3 h-3" /> : <div className="w-3 h-3 rounded-full border" />}
+                            <div
+                                className={cn(
+                                    "flex items-center gap-1",
+                                    hasMinLength ? "text-green-600" : ""
+                                )}
+                            >
+                                {hasMinLength ? (
+                                    <Check className="w-3 h-3" />
+                                ) : (
+                                    <div className="w-3 h-3 rounded-full border" />
+                                )}
                                 8+ chars
                             </div>
-                            <div className={cn("flex items-center gap-1", hasNumber ? "text-green-600" : "")}>
-                                {hasNumber ? <Check className="w-3 h-3" /> : <div className="w-3 h-3 rounded-full border" />}
+                            <div
+                                className={cn(
+                                    "flex items-center gap-1",
+                                    hasNumber ? "text-green-600" : ""
+                                )}
+                            >
+                                {hasNumber ? (
+                                    <Check className="w-3 h-3" />
+                                ) : (
+                                    <div className="w-3 h-3 rounded-full border" />
+                                )}
                                 Number
                             </div>
-                            <div className={cn("flex items-center gap-1", hasSpecial ? "text-green-600" : "")}>
-                                {hasSpecial ? <Check className="w-3 h-3" /> : <div className="w-3 h-3 rounded-full border" />}
+                            <div
+                                className={cn(
+                                    "flex items-center gap-1",
+                                    hasSpecial ? "text-green-600" : ""
+                                )}
+                            >
+                                {hasSpecial ? (
+                                    <Check className="w-3 h-3" />
+                                ) : (
+                                    <div className="w-3 h-3 rounded-full border" />
+                                )}
                                 Symbol
                             </div>
                         </div>
@@ -183,10 +229,20 @@ export function SignupForm() {
                                 htmlFor="terms"
                                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                             >
-                                I agree to the <Link href="/terms" className="underline hover:text-primary">Terms of Service</Link> and <Link href="/privacy" className="underline hover:text-primary">Privacy Policy</Link>.
+                                I agree to the{" "}
+                                <Link href="/terms" className="underline hover:text-primary">
+                                    Terms of Service
+                                </Link>{" "}
+                                and{" "}
+                                <Link href="/privacy" className="underline hover:text-primary">
+                                    Privacy Policy
+                                </Link>
+                                .
                             </label>
                             {form.formState.errors.terms && (
-                                <p className="text-sm text-red-500">{form.formState.errors.terms.message}</p>
+                                <p className="text-sm text-red-500">
+                                    {form.formState.errors.terms.message}
+                                </p>
                             )}
                         </div>
                     </div>
@@ -200,13 +256,11 @@ export function SignupForm() {
                     )}
 
                     <Button disabled={isLoading} className="w-full mt-4">
-                        {isLoading && (
-                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        )}
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Create account & start free trial
                     </Button>
                 </div>
             </form>
         </div>
-    )
+    );
 }

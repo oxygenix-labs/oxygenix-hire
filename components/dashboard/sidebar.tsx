@@ -1,16 +1,9 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import {
-    LayoutDashboard,
-    Briefcase,
-    Users,
-    MessageSquare,
-    Settings,
-    LogOut
-} from "lucide-react";
+import { LayoutDashboard, Briefcase, Users, MessageSquare, Settings, LogOut } from "lucide-react";
 
 const sidebarLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -37,7 +30,13 @@ export function Sidebar() {
                 <div className="flex-1 overflow-auto py-2">
                     <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
                         {sidebarLinks.map((link) => {
-                            const isActive = pathname === link.href;
+                            // Check if current path matches or starts with the link href
+                            // Special case: Dashboard should only be active on exact match
+                            const isActive =
+                                link.href === "/dashboard"
+                                    ? pathname === link.href
+                                    : pathname.startsWith(link.href);
+
                             return (
                                 <Link
                                     key={link.href}
@@ -45,8 +44,8 @@ export function Sidebar() {
                                     className={cn(
                                         "flex items-center gap-3 rounded-lg px-3 py-2 transition-all hover:text-primary",
                                         isActive
-                                            ? "bg-muted text-primary"
-                                            : "text-muted-foreground"
+                                            ? "bg-primary text-primary-foreground font-semibold"
+                                            : "text-muted-foreground hover:bg-muted"
                                     )}
                                 >
                                     <link.icon className="h-4 w-4" />

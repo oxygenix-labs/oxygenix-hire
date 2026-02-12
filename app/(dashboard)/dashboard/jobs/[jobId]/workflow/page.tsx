@@ -1,20 +1,20 @@
-import { auth } from "@/lib/auth"
-import connectToDatabase from "@/lib/db"
-import Job from "@/models/Job"
-import { redirect } from "next/navigation"
-import { WorkflowClient } from "@/components/workflow/workflow-client"
+import { auth } from "@/lib/auth";
+import connectToDatabase from "@/lib/db";
+import Job from "@/models/Job";
+import { redirect } from "next/navigation";
+import { WorkflowClient } from "@/components/workflow/workflow-client";
 
 async function getJobWorkflow(jobId: string) {
-    const session = await auth()
-    if (!session?.user?.email) return null
+    const session = await auth();
+    if (!session?.user?.email) return null;
 
-    await connectToDatabase()
-    const User = (await import("@/models/User")).default
-    const user = await User.findOne({ email: session.user.email })
+    await connectToDatabase();
+    const User = (await import("@/models/User")).default;
+    const user = await User.findOne({ email: session.user.email });
 
-    const job = await Job.findById(jobId)
+    const job = await Job.findById(jobId);
     if (!job || job.organizationId.toString() !== user.organizationId?.toString()) {
-        return null
+        return null;
     }
 
     // Default workflow if missing (migration)
@@ -22,24 +22,24 @@ async function getJobWorkflow(jobId: string) {
         job.workflow = {
             currentStep: 1,
             steps: {
-                jobDescription: { status: 'not_started', data: {} },
-                resumeScreening: { status: 'not_started', data: {} },
-                interviewPlanning: { status: 'not_started', data: {} },
-                hiringDecision: { status: 'not_started', data: {} },
-                offer: { status: 'not_started', data: {} }
-            }
-        }
-        await job.save()
+                jobDescription: { status: "not_started", data: {} },
+                resumeScreening: { status: "not_started", data: {} },
+                interviewPlanning: { status: "not_started", data: {} },
+                hiringDecision: { status: "not_started", data: {} },
+                offer: { status: "not_started", data: {} },
+            },
+        };
+        await job.save();
     }
 
-    return JSON.parse(JSON.stringify(job))
+    return JSON.parse(JSON.stringify(job));
 }
 
 export default async function JobWorkflowPage({ params }: { params: Promise<{ jobId: string }> }) {
-    const { jobId } = await params
-    const job = await getJobWorkflow(jobId)
+    const { jobId } = await params;
+    const job = await getJobWorkflow(jobId);
 
-    if (!job) redirect("/dashboard/jobs")
+    if (!job) redirect("/dashboard/jobs");
 
-    return <WorkflowClient job={job} />
+    return <WorkflowClient job={job} />;
 }

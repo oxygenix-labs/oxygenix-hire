@@ -1,35 +1,35 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const UserSchema = new Schema(
     {
         name: {
             type: String,
-            required: [true, 'Please provide a name'],
-            maxlength: [60, 'Name cannot be more than 60 characters'],
+            required: [true, "Please provide a name"],
+            maxlength: [60, "Name cannot be more than 60 characters"],
         },
         email: {
             type: String,
-            required: [true, 'Please provide an email'],
+            required: [true, "Please provide an email"],
             unique: true,
             lowercase: true,
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-                'Please provide a valid email address',
+                "Please provide a valid email address",
             ],
         },
         password: {
             type: String,
-            required: [true, 'Please provide a password'],
+            required: [true, "Please provide a password"],
             select: false, // Don't return password by default
         },
         role: {
             type: String,
-            enum: ['owner', 'member', 'candidate', 'recruiter', 'admin'],
-            default: 'candidate',
+            enum: ["owner", "member", "candidate", "recruiter", "admin"],
+            default: "candidate",
         },
         organizationId: {
             type: Schema.Types.ObjectId,
-            ref: 'Organization',
+            ref: "Organization",
         },
         image: {
             type: String,
@@ -52,7 +52,7 @@ const UserSchema = new Schema(
         },
         timezone: {
             type: String,
-            default: 'UTC',
+            default: "UTC",
         },
         notificationPreferences: {
             newApplication: { type: Boolean, default: true },
@@ -70,6 +70,6 @@ const UserSchema = new Schema(
 );
 
 // Prevent model overwrite in development
-const User = models.User || model('User', UserSchema);
+const User = models.User || model("User", UserSchema);
 
 export default User;

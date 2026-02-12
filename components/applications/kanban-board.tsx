@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
+import { useMemo, useState } from "react";
 import {
     DndContext,
     DragEndEvent,
@@ -10,32 +10,32 @@ import {
     PointerSensor,
     useSensor,
     useSensors,
-} from "@dnd-kit/core"
-import { arrayMove } from "@dnd-kit/sortable"
-import { KanbanColumn } from "./kanban-column"
-import { KanbanCard } from "./kanban-card"
-import { useRouter } from "next/navigation"
+} from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+import { KanbanColumn } from "./kanban-column";
+import { KanbanCard } from "./kanban-card";
+import { useRouter } from "next/navigation";
 
 interface Candidate {
-    _id: string
-    firstName: string
-    lastName: string
-    email: string
-    jobId: { title: string }
-    stage: string
-    updatedAt: string
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    jobId: { title: string };
+    stage: string;
+    updatedAt: string;
 }
 
 interface KanbanBoardProps {
-    initialCandidates: Candidate[]
+    initialCandidates: Candidate[];
 }
 
-const STAGES = ['Applied', 'Screening', 'Interview', 'Offer', 'Hired', 'Rejected']
+const STAGES = ["Applied", "Screening", "Interview", "Offer", "Hired", "Rejected"];
 
 export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
-    const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates)
-    const [activeCandidate, setActiveCandidate] = useState<Candidate | null>(null)
-    const router = useRouter()
+    const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
+    const [activeCandidate, setActiveCandidate] = useState<Candidate | null>(null);
+    const router = useRouter();
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -43,66 +43,66 @@ export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
                 distance: 5, // Prevent accidental drags
             },
         })
-    )
+    );
 
     const columns = useMemo(() => {
-        return STAGES.map(stage => ({
+        return STAGES.map((stage) => ({
             id: stage,
             title: stage,
-            candidates: candidates.filter(c => c.stage === stage)
-        }))
-    }, [candidates])
+            candidates: candidates.filter((c) => c.stage === stage),
+        }));
+    }, [candidates]);
 
     function onDragStart(event: DragStartEvent) {
         if (event.active.data.current?.type === "candidate") {
-            setActiveCandidate(event.active.data.current.candidate)
+            setActiveCandidate(event.active.data.current.candidate);
         }
     }
 
     function onDragOver(event: DragOverEvent) {
-        const { active, over } = event
-        if (!over) return
+        const { active, over } = event;
+        if (!over) return;
 
-        const activeId = active.id
-        const overId = over.id
+        const activeId = active.id;
+        const overId = over.id;
 
-        if (activeId === overId) return
+        if (activeId === overId) return;
 
         // If dragging over a column (empty area)
-        const isActiveTask = active.data.current?.type === "candidate"
-        const isOverColumn = STAGES.includes(overId as string)
+        const isActiveTask = active.data.current?.type === "candidate";
+        const isOverColumn = STAGES.includes(overId as string);
 
         if (isActiveTask && isOverColumn) {
             setCandidates((candidates) => {
-                const activeIndex = candidates.findIndex((t) => t._id === activeId)
+                const activeIndex = candidates.findIndex((t) => t._id === activeId);
 
                 // Optimistically update stage locally
-                const newStage = overId as string
+                const newStage = overId as string;
                 if (candidates[activeIndex].stage !== newStage) {
-                    const newCandidates = [...candidates]
+                    const newCandidates = [...candidates];
                     newCandidates[activeIndex] = {
                         ...newCandidates[activeIndex],
-                        stage: newStage
-                    }
-                    return newCandidates
+                        stage: newStage,
+                    };
+                    return newCandidates;
                 }
-                return candidates
-            })
+                return candidates;
+            });
         }
     }
 
     async function onDragEnd(event: DragEndEvent) {
-        const { active, over } = event
+        const { active, over } = event;
 
-        setActiveCandidate(null)
+        setActiveCandidate(null);
 
-        if (!over) return
+        if (!over) return;
 
-        const activeId = active.id
+        const activeId = active.id;
         // const overId = over.id
 
         // Find the candidate and update the backend
-        const candidate = candidates.find(c => c._id === activeId)
+        const candidate = candidates.find((c) => c._id === activeId);
         if (candidate) {
             // Check if stage actually changed from initial state (managed by dragOver mostly)
             // But dragOver updates state, so onDragEnd is where we commit.
@@ -123,10 +123,10 @@ export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
                     method: "PATCH",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ stage: candidate.stage }),
-                })
+                });
                 // router.refresh() // Optional, re-fetch to be safe
             } catch (error) {
-                console.error("Failed to update status", error)
+                console.error("Failed to update status", error);
                 // Ideally revert optimistic update here on error
             }
         }
@@ -152,10 +152,8 @@ export function KanbanBoard({ initialCandidates }: KanbanBoardProps) {
 
             {/* Overlay for drag preview */}
             <DragOverlay>
-                {activeCandidate ? (
-                    <KanbanCard candidate={activeCandidate} />
-                ) : null}
+                {activeCandidate ? <KanbanCard candidate={activeCandidate} /> : null}
             </DragOverlay>
         </DndContext>
-    )
+    );
 }

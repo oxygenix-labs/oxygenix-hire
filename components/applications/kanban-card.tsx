@@ -1,45 +1,38 @@
-"use client"
+"use client";
 
-import { useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { GripVertical } from "lucide-react"
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { GripVertical } from "lucide-react";
 
 interface Candidate {
-    _id: string
-    firstName: string
-    lastName: string
-    email: string
-    jobId: { title: string }
-    stage: string
-    updatedAt: string
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    jobId: { title: string };
+    stage: string;
+    updatedAt: string;
 }
 
 interface KanbanCardProps {
-    candidate: Candidate
+    candidate: Candidate;
 }
 
 export function KanbanCard({ candidate }: KanbanCardProps) {
-    const {
-        setNodeRef,
-        attributes,
-        listeners,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({
+    const { setNodeRef, attributes, listeners, transform, transition, isDragging } = useSortable({
         id: candidate._id,
         data: {
             type: "candidate",
             candidate,
         },
-    })
+    });
 
     const style = {
         transform: CSS.Transform.toString(transform),
         transition,
-    }
+    };
 
     if (isDragging) {
         return (
@@ -48,7 +41,7 @@ export function KanbanCard({ candidate }: KanbanCardProps) {
                 style={style}
                 className="opacity-50 h-[100px] bg-muted border-2 border-primary/20 rounded-xl"
             />
-        )
+        );
     }
 
     return (
@@ -76,5 +69,5 @@ export function KanbanCard({ candidate }: KanbanCardProps) {
                 </div>
             </CardContent>
         </Card>
-    )
+    );
 }

@@ -1,11 +1,11 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const OrganizationSchema = new Schema(
     {
         name: {
             type: String,
-            required: [true, 'Please provide an organization name'],
-            maxlength: [100, 'Name cannot be more than 100 characters'],
+            required: [true, "Please provide an organization name"],
+            maxlength: [100, "Name cannot be more than 100 characters"],
         },
         logoUrl: { type: String },
         website: { type: String },
@@ -13,8 +13,8 @@ const OrganizationSchema = new Schema(
         companySize: { type: String },
         plan: {
             type: String,
-            enum: ['free_trial', 'pro', 'team', 'enterprise'],
-            default: 'free_trial',
+            enum: ["free_trial", "pro", "team", "enterprise"],
+            default: "free_trial",
         },
         trialEndsAt: {
             type: Date,
@@ -22,16 +22,18 @@ const OrganizationSchema = new Schema(
         stripeCustomerId: {
             type: String,
         },
-        members: [{
-            type: Schema.Types.ObjectId,
-            ref: 'User'
-        }]
+        members: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     {
         timestamps: true,
     }
 );
 
-const Organization = models.Organization || model('Organization', OrganizationSchema);
+const Organization = models.Organization || model("Organization", OrganizationSchema);
 
 export default Organization;

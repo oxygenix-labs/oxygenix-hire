@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Sparkles, Users, GitPullRequest, Calendar, FileCheck, Share2 } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sparkles, Users, GitPullRequest, Calendar, FileCheck, Share2 } from "lucide-react";
 
 const features = [
     {
@@ -32,7 +32,7 @@ const features = [
         description: "Create approved offer templates and track status.",
         icon: FileCheck,
     },
-]
+];
 
 const FeaturesGrid = () => {
     return (
@@ -52,7 +52,10 @@ const FeaturesGrid = () => {
 
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {features.map((feature, index) => (
-                        <Card key={index} className="group hover:border-primary/50 transition-all hover:shadow-md">
+                        <Card
+                            key={index}
+                            className="group hover:border-primary/50 transition-all hover:shadow-md"
+                        >
                             <CardHeader>
                                 <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     <feature.icon className="w-5 h-5" />
@@ -60,16 +63,14 @@ const FeaturesGrid = () => {
                                 <CardTitle className="text-xl">{feature.title}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-muted-foreground">
-                                    {feature.description}
-                                </p>
+                                <p className="text-muted-foreground">{feature.description}</p>
                             </CardContent>
                         </Card>
                     ))}
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default FeaturesGrid
+export default FeaturesGrid;

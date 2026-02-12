@@ -1,36 +1,47 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { Wand2, Send, Save, Check } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { Wand2, Send, Save, Check } from "lucide-react";
 
 interface OfferBuilderProps {
     candidate: {
-        _id: string
-        firstName: string
-        lastName: string
-        jobId: { _id: string, title: string }
-    },
-    existingOffer: any // Typed lazily for demo
+        _id: string;
+        firstName: string;
+        lastName: string;
+        jobId: { _id: string; title: string };
+    };
+    existingOffer: any; // Typed lazily for demo
 }
 
 export function OfferBuilder({ candidate, existingOffer }: OfferBuilderProps) {
-    const router = useRouter()
-    const [salary, setSalary] = useState<number>(existingOffer?.baseSalary || 100000)
-    const [equity, setEquity] = useState(existingOffer?.equity || "0.1%")
-    const [startDate, setStartDate] = useState(existingOffer?.startDate ? new Date(existingOffer.startDate).toISOString().split('T')[0] : "")
-    const [content, setContent] = useState(existingOffer?.content || "")
-    const [isGenerating, setIsGenerating] = useState(false)
-    const [isSaving, setIsSaving] = useState(false)
+    const router = useRouter();
+    const [salary, setSalary] = useState<number>(existingOffer?.baseSalary || 100000);
+    const [equity, setEquity] = useState(existingOffer?.equity || "0.1%");
+    const [startDate, setStartDate] = useState(
+        existingOffer?.startDate
+            ? new Date(existingOffer.startDate).toISOString().split("T")[0]
+            : ""
+    );
+    const [content, setContent] = useState(existingOffer?.content || "");
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
 
     const generateLetter = () => {
-        setIsGenerating(true)
+        setIsGenerating(true);
         // Mock AI Generation
         setTimeout(() => {
             const letter = `Dear ${candidate.firstName},
@@ -47,14 +58,14 @@ Terms of the offer:
 We look forward to welcoming you to the team.
 
 Sincerely,
-The Oxygenix Hiring Team`
-            setContent(letter)
-            setIsGenerating(false)
-        }, 800)
-    }
+The Oxygenix Hiring Team`;
+            setContent(letter);
+            setIsGenerating(false);
+        }, 800);
+    };
 
-    const handleSave = async (status: 'Draft' | 'Sent') => {
-        setIsSaving(true)
+    const handleSave = async (status: "Draft" | "Sent") => {
+        setIsSaving(true);
         try {
             const res = await fetch("/api/offers", {
                 method: "POST",
@@ -67,19 +78,19 @@ The Oxygenix Hiring Team`
                     startDate,
                     status,
                     content,
-                })
-            })
+                }),
+            });
 
-            if (!res.ok) throw new Error("Failed to save offer")
+            if (!res.ok) throw new Error("Failed to save offer");
 
-            router.push("/dashboard/candidates")
-            router.refresh()
+            router.push("/dashboard/candidates");
+            router.refresh();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsSaving(false)
+            setIsSaving(false);
         }
-    }
+    };
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
@@ -105,10 +116,7 @@ The Oxygenix Hiring Team`
 
                     <div className="space-y-2">
                         <Label>Equity (Options/Shares)</Label>
-                        <Input
-                            value={equity}
-                            onChange={(e) => setEquity(e.target.value)}
-                        />
+                        <Input value={equity} onChange={(e) => setEquity(e.target.value)} />
                     </div>
 
                     <div className="space-y-2">
@@ -148,16 +156,20 @@ The Oxygenix Hiring Team`
                     />
                 </CardContent>
                 <CardFooter className="flex justify-between border-t bg-muted/5 pt-6">
-                    <Button variant="outline" onClick={() => handleSave('Draft')} disabled={isSaving}>
+                    <Button
+                        variant="outline"
+                        onClick={() => handleSave("Draft")}
+                        disabled={isSaving}
+                    >
                         <Save className="mr-2 h-4 w-4" />
                         Save Draft
                     </Button>
-                    <Button onClick={() => handleSave('Sent')} disabled={isSaving || !content}>
+                    <Button onClick={() => handleSave("Sent")} disabled={isSaving || !content}>
                         <Send className="mr-2 h-4 w-4" />
                         Send Offer
                     </Button>
                 </CardFooter>
             </Card>
         </div>
-    )
+    );
 }

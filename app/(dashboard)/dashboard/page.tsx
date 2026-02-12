@@ -1,8 +1,8 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { MetricsCard } from "@/components/dashboard/metrics-cards"
-import { RecentActivity } from "@/components/dashboard/recent-activity"
-import { Briefcase, Users, FileCheck, Calendar } from "lucide-react"
-import Link from "next/link"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { MetricsCard } from "@/components/dashboard/metrics-cards";
+import { RecentActivity } from "@/components/dashboard/recent-activity";
+import { Briefcase, Users, FileCheck, Calendar } from "lucide-react";
+import Link from "next/link";
 
 async function getDashboardMetrics() {
     // In a real app, this would fetch from the DB
@@ -12,11 +12,11 @@ async function getDashboardMetrics() {
         totalCandidates: 148,
         interviewsScheduled: 8,
         offersSent: 3,
-    }
+    };
 }
 
 export default async function DashboardPage() {
-    const metrics = await getDashboardMetrics()
+    const metrics = await getDashboardMetrics();
 
     return (
         <div className="flex flex-col gap-6">
@@ -75,8 +75,12 @@ export default async function DashboardPage() {
                         <Link href="/dashboard/jobs/new">
                             <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                                 <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">Post a New Job</p>
-                                    <p className="text-sm text-muted-foreground">Create a listing and publish to boards.</p>
+                                    <p className="text-sm font-medium leading-none">
+                                        Post a New Job
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Create a listing and publish to boards.
+                                    </p>
                                 </div>
                                 <Briefcase className="h-4 w-4 text-muted-foreground" />
                             </div>
@@ -85,15 +89,21 @@ export default async function DashboardPage() {
                         <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                             <div className="flex-1 space-y-1">
                                 <p className="text-sm font-medium leading-none">Add Candidate</p>
-                                <p className="text-sm text-muted-foreground">Manually add a candidate profile.</p>
+                                <p className="text-sm text-muted-foreground">
+                                    Manually add a candidate profile.
+                                </p>
                             </div>
                             <Users className="h-4 w-4 text-muted-foreground" />
                         </div>
 
                         <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
                             <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium leading-none">Schedule Interview</p>
-                                <p className="text-sm text-muted-foreground">Sync with calendar and invite team.</p>
+                                <p className="text-sm font-medium leading-none">
+                                    Schedule Interview
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    Sync with calendar and invite team.
+                                </p>
                             </div>
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                         </div>
@@ -101,5 +111,5 @@ export default async function DashboardPage() {
                 </Card>
             </div>
         </div>
-    )
+    );
 }

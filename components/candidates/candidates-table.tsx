@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
     Table,
@@ -7,35 +7,35 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { useState } from "react"
-import { CandidateProfileSheet } from "./candidate-profile"
-import { format } from "date-fns"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useState } from "react";
+import { CandidateProfileSheet } from "./candidate-profile";
+import { format } from "date-fns";
 
 interface Candidate {
-    _id: string
-    firstName: string
-    lastName: string
-    email: string
-    jobId: { _id: string, title: string } // Populated
-    stage: string
-    createdAt: string
+    _id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    jobId: { _id: string; title: string }; // Populated
+    stage: string;
+    createdAt: string;
 }
 
 interface CandidatesTableProps {
-    candidates: Candidate[]
+    candidates: Candidate[];
 }
 
 export function CandidatesTable({ candidates }: CandidatesTableProps) {
-    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null)
-    const [open, setOpen] = useState(false)
+    const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+    const [open, setOpen] = useState(false);
 
     const handleRowClick = (candidate: Candidate) => {
-        setSelectedCandidate(candidate)
-        setOpen(true)
-    }
+        setSelectedCandidate(candidate);
+        setOpen(true);
+    };
 
     return (
         <>
@@ -65,16 +65,29 @@ export function CandidatesTable({ candidates }: CandidatesTableProps) {
                                 >
                                     <TableCell className="flex items-center gap-3">
                                         <Avatar className="h-8 w-8">
-                                            <AvatarFallback>{candidate.firstName[0]}{candidate.lastName[0]}</AvatarFallback>
+                                            <AvatarFallback>
+                                                {candidate.firstName[0]}
+                                                {candidate.lastName[0]}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div className="flex flex-col">
-                                            <span className="font-medium">{candidate.firstName} {candidate.lastName}</span>
-                                            <span className="text-xs text-muted-foreground">{candidate.email}</span>
+                                            <span className="font-medium">
+                                                {candidate.firstName} {candidate.lastName}
+                                            </span>
+                                            <span className="text-xs text-muted-foreground">
+                                                {candidate.email}
+                                            </span>
                                         </div>
                                     </TableCell>
                                     <TableCell>{candidate.jobId?.title || "Unknown"}</TableCell>
                                     <TableCell>
-                                        <Badge variant={candidate.stage === "Hired" ? "default" : "secondary"}>
+                                        <Badge
+                                            variant={
+                                                candidate.stage === "Hired"
+                                                    ? "default"
+                                                    : "secondary"
+                                            }
+                                        >
                                             {candidate.stage}
                                         </Badge>
                                     </TableCell>
@@ -94,5 +107,5 @@ export function CandidatesTable({ candidates }: CandidatesTableProps) {
                 onOpenChange={setOpen}
             />
         </>
-    )
+    );
 }

@@ -1,16 +1,16 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const DecisionSchema = new Schema(
     {
         candidateId: {
             type: Schema.Types.ObjectId,
-            ref: 'Candidate',
+            ref: "Candidate",
             required: true,
             unique: true, // One decision per candidate for now
         },
         organizationId: {
             type: Schema.Types.ObjectId,
-            ref: 'Organization',
+            ref: "Organization",
             required: true,
         },
         feedback: {
@@ -27,12 +27,12 @@ const DecisionSchema = new Schema(
         },
         outcome: {
             type: String,
-            enum: ['Hire', 'Reject'],
+            enum: ["Hire", "Reject"],
             required: true,
         },
         lockedBy: {
             type: Schema.Types.ObjectId,
-            ref: 'User',
+            ref: "User",
             required: true,
         },
     },
@@ -41,6 +41,6 @@ const DecisionSchema = new Schema(
     }
 );
 
-const Decision = models.Decision || model('Decision', DecisionSchema);
+const Decision = models.Decision || model("Decision", DecisionSchema);
 
 export default Decision;

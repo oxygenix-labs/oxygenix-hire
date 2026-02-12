@@ -1,13 +1,20 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
-import { AlertTriangle, CheckCircle, XCircle, BrainCircuit, Lock } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+    CardFooter,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
+import { AlertTriangle, CheckCircle, XCircle, BrainCircuit, Lock } from "lucide-react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -18,34 +25,40 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 interface DecisionFormProps {
-    candidateId: string
-    candidateName: string
+    candidateId: string;
+    candidateName: string;
 }
 
 export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) {
-    const router = useRouter()
-    const [feedback, setFeedback] = useState("")
-    const [aiAnalysis, setAiAnalysis] = useState<{ score: number, summary: string } | null>(null)
-    const [outcome, setOutcome] = useState<"Hire" | "Reject" | null>(null)
-    const [isSubmitting, setIsSubmitting] = useState(false)
+    const router = useRouter();
+    const [feedback, setFeedback] = useState("");
+    const [aiAnalysis, setAiAnalysis] = useState<{ score: number; summary: string } | null>(null);
+    const [outcome, setOutcome] = useState<"Hire" | "Reject" | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const analyzeFeedback = () => {
         // Mock AI Logic
-        const sentiment = feedback.length > 50 ? (feedback.includes("good") || feedback.includes("excellent") ? "positive" : "neutral") : "neutral"
-        const score = sentiment === "positive" ? 85 : 60
-        const summary = sentiment === "positive"
-            ? "Candidate shows strong potential based on feedback."
-            : "Feedback indicates areas for concern."
+        const sentiment =
+            feedback.length > 50
+                ? feedback.includes("good") || feedback.includes("excellent")
+                    ? "positive"
+                    : "neutral"
+                : "neutral";
+        const score = sentiment === "positive" ? 85 : 60;
+        const summary =
+            sentiment === "positive"
+                ? "Candidate shows strong potential based on feedback."
+                : "Feedback indicates areas for concern.";
 
-        setAiAnalysis({ score, summary })
-    }
+        setAiAnalysis({ score, summary });
+    };
 
     const handleSubmit = async () => {
-        if (!outcome) return
-        setIsSubmitting(true)
+        if (!outcome) return;
+        setIsSubmitting(true);
         try {
             const res = await fetch("/api/decisions", {
                 method: "POST",
@@ -56,19 +69,19 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                     aiScore: aiAnalysis?.score,
                     aiAnalysis: aiAnalysis?.summary,
                     outcome,
-                })
-            })
+                }),
+            });
 
-            if (!res.ok) throw new Error("Failed to submit decision")
+            if (!res.ok) throw new Error("Failed to submit decision");
 
-            router.push("/dashboard/candidates")
-            router.refresh()
+            router.push("/dashboard/candidates");
+            router.refresh();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsSubmitting(false)
+            setIsSubmitting(false);
         }
-    }
+    };
 
     return (
         <Card className="w-full max-w-3xl mx-auto">
@@ -78,7 +91,8 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                     Final Decision: {candidateName}
                 </CardTitle>
                 <CardDescription>
-                    Review interview feedback and lock your final decision. This action will update the candidate's status permanently.
+                    Review interview feedback and lock your final decision. This action will update
+                    the candidate's status permanently.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -106,7 +120,9 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
 
                 {aiAnalysis && (
                     <div className="bg-muted/30 p-4 rounded-lg border flex items-start gap-4 animate-in fade-in slide-in-from-top-2">
-                        <div className={`text-2xl font-bold ${aiAnalysis.score >= 80 ? "text-green-600" : "text-yellow-600"}`}>
+                        <div
+                            className={`text-2xl font-bold ${aiAnalysis.score >= 80 ? "text-green-600" : "text-yellow-600"}`}
+                        >
                             {aiAnalysis.score}/100
                         </div>
                         <div>
@@ -123,14 +139,18 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                             onClick={() => setOutcome("Hire")}
                             className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:bg-green-50/50 ${outcome === "Hire" ? "border-green-500 bg-green-50" : "border-transparent bg-muted/20"}`}
                         >
-                            <CheckCircle className={`h-8 w-8 ${outcome === "Hire" ? "text-green-600" : "text-muted-foreground"}`} />
+                            <CheckCircle
+                                className={`h-8 w-8 ${outcome === "Hire" ? "text-green-600" : "text-muted-foreground"}`}
+                            />
                             <span className="font-semibold">HIRE</span>
                         </div>
                         <div
                             onClick={() => setOutcome("Reject")}
                             className={`cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center justify-center gap-2 transition-all hover:bg-red-50/50 ${outcome === "Reject" ? "border-red-500 bg-red-50" : "border-transparent bg-muted/20"}`}
                         >
-                            <XCircle className={`h-8 w-8 ${outcome === "Reject" ? "text-red-600" : "text-muted-foreground"}`} />
+                            <XCircle
+                                className={`h-8 w-8 ${outcome === "Reject" ? "text-red-600" : "text-muted-foreground"}`}
+                            />
                             <span className="font-semibold">REJECT</span>
                         </div>
                     </div>
@@ -139,7 +159,11 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
             <CardFooter className="flex justify-end pt-6 border-t bg-muted/5">
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
-                        <Button disabled={!outcome || feedback.length < 10 || isSubmitting} size="lg" variant={outcome === "Reject" ? "destructive" : "default"}>
+                        <Button
+                            disabled={!outcome || feedback.length < 10 || isSubmitting}
+                            size="lg"
+                            variant={outcome === "Reject" ? "destructive" : "default"}
+                        >
                             {isSubmitting ? "Locking..." : `Confirm ${outcome}`}
                         </Button>
                     </AlertDialogTrigger>
@@ -147,12 +171,21 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                This will change the candidate's status to <strong>{outcome?.toUpperCase()}</strong> and send a notification email (mock). This action cannot be undone.
+                                This will change the candidate's status to{" "}
+                                <strong>{outcome?.toUpperCase()}</strong> and send a notification
+                                email (mock). This action cannot be undone.
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction onClick={handleSubmit} className={outcome === "Reject" ? "bg-destructive hover:bg-destructive/90" : ""}>
+                            <AlertDialogAction
+                                onClick={handleSubmit}
+                                className={
+                                    outcome === "Reject"
+                                        ? "bg-destructive hover:bg-destructive/90"
+                                        : ""
+                                }
+                            >
                                 Confirm Decision
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -160,5 +193,5 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                 </AlertDialog>
             </CardFooter>
         </Card>
-    )
+    );
 }

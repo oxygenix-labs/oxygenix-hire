@@ -1,21 +1,21 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const OfferSchema = new Schema(
     {
         candidateId: {
             type: Schema.Types.ObjectId,
-            ref: 'Candidate',
+            ref: "Candidate",
             required: true,
             unique: true, // One active offer per candidate logic (can be expanded later)
         },
         organizationId: {
             type: Schema.Types.ObjectId,
-            ref: 'Organization',
+            ref: "Organization",
             required: true,
         },
         jobId: {
             type: Schema.Types.ObjectId,
-            ref: 'Job',
+            ref: "Job",
             required: true,
         },
         baseSalary: {
@@ -34,15 +34,15 @@ const OfferSchema = new Schema(
         },
         status: {
             type: String,
-            enum: ['Draft', 'Sent', 'Accepted', 'Rejected'],
-            default: 'Draft',
+            enum: ["Draft", "Sent", "Accepted", "Rejected"],
+            default: "Draft",
         },
         content: {
             type: String, // Offer Letter Body
         },
         createdBy: {
             type: Schema.Types.ObjectId,
-            ref: 'User',
+            ref: "User",
             required: true,
         },
     },
@@ -51,6 +51,6 @@ const OfferSchema = new Schema(
     }
 );
 
-const Offer = models.Offer || model('Offer', OfferSchema);
+const Offer = models.Offer || model("Offer", OfferSchema);
 
 export default Offer;

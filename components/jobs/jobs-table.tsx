@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
     Table,
@@ -7,75 +7,75 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MoreHorizontal, Loader2 } from "lucide-react"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
-import { format } from "date-fns"
+} from "@/components/ui/dropdown-menu";
+import { MoreHorizontal, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { format } from "date-fns";
 
 interface Job {
-    _id: string
-    title: string
-    type: string
-    location: string
-    status: "active" | "draft" | "closed"
-    applicantsCount: number
-    createdAt: string
+    _id: string;
+    title: string;
+    type: string;
+    location: string;
+    status: "active" | "draft" | "closed";
+    applicantsCount: number;
+    createdAt: string;
 }
 
 interface JobsTableProps {
-    jobs: Job[]
+    jobs: Job[];
 }
 
 export function JobsTable({ jobs }: JobsTableProps) {
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState<string | null>(null)
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState<string | null>(null);
 
     const handleStatusChange = async (jobId: string, status: string) => {
         try {
-            setIsLoading(jobId)
+            setIsLoading(jobId);
             const res = await fetch(`/api/jobs/${jobId}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status }),
-            })
+            });
 
-            if (!res.ok) throw new Error("Failed to update status")
+            if (!res.ok) throw new Error("Failed to update status");
 
-            router.refresh()
+            router.refresh();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsLoading(null)
+            setIsLoading(null);
         }
-    }
+    };
 
     const handleDelete = async (jobId: string) => {
-        if (!confirm("Are you sure you want to delete this job?")) return
+        if (!confirm("Are you sure you want to delete this job?")) return;
 
         try {
-            setIsLoading(jobId)
+            setIsLoading(jobId);
             const res = await fetch(`/api/jobs/${jobId}`, {
                 method: "DELETE",
-            })
+            });
 
-            if (!res.ok) throw new Error("Failed to delete job")
+            if (!res.ok) throw new Error("Failed to delete job");
 
-            router.refresh()
+            router.refresh();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsLoading(null)
+            setIsLoading(null);
         }
-    }
+    };
 
     return (
         <div className="rounded-md border">
@@ -107,8 +107,11 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                 <TableCell>
                                     <Badge
                                         variant={
-                                            job.status === "active" ? "default" :
-                                                job.status === "draft" ? "secondary" : "outline"
+                                            job.status === "active"
+                                                ? "default"
+                                                : job.status === "draft"
+                                                  ? "secondary"
+                                                  : "outline"
                                         }
                                     >
                                         {job.status}
@@ -132,23 +135,44 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onClick={() => router.push(`/dashboard/jobs/${job._id}/edit`)}>
+                                            <DropdownMenuItem
+                                                onClick={() =>
+                                                    router.push(`/dashboard/jobs/${job._id}/edit`)
+                                                }
+                                            >
                                                 Edit Job
                                             </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => router.push(`/dashboard/jobs/${job._id}/workflow`)}>
+                                            <DropdownMenuItem
+                                                onClick={() =>
+                                                    router.push(
+                                                        `/dashboard/jobs/${job._id}/workflow`
+                                                    )
+                                                }
+                                            >
                                                 Open Workflow
                                             </DropdownMenuItem>
                                             {job.status !== "closed" && (
-                                                <DropdownMenuItem onClick={() => handleStatusChange(job._id, "closed")}>
+                                                <DropdownMenuItem
+                                                    onClick={() =>
+                                                        handleStatusChange(job._id, "closed")
+                                                    }
+                                                >
                                                     Close Job
                                                 </DropdownMenuItem>
                                             )}
                                             {job.status === "closed" && (
-                                                <DropdownMenuItem onClick={() => handleStatusChange(job._id, "active")}>
+                                                <DropdownMenuItem
+                                                    onClick={() =>
+                                                        handleStatusChange(job._id, "active")
+                                                    }
+                                                >
                                                     Reopen Job
                                                 </DropdownMenuItem>
                                             )}
-                                            <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(job._id)}>
+                                            <DropdownMenuItem
+                                                className="text-destructive"
+                                                onClick={() => handleDelete(job._id)}
+                                            >
                                                 Delete Job
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -160,5 +184,5 @@ export function JobsTable({ jobs }: JobsTableProps) {
                 </TableBody>
             </Table>
         </div>
-    )
+    );
 }

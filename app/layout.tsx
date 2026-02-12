@@ -8,25 +8,27 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const manrope = Manrope({ subsets: ["latin"], variable: "--font-heading" });
 
 export const metadata: Metadata = {
-  title: "Oxygenix Hire",
-  description: "Advanced Hiring Platform for Modern Teams",
+    title: "Oxygenix Hire",
+    description: "Advanced Hiring Platform for Modern Teams",
 };
 
 export default function RootLayout({
-  children,
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body className={cn(
-        "min-h-screen bg-background font-sans antialiased",
-        inter.variable,
-        manrope.variable
-      )}>
-        {children}
-        <Toaster />
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en">
+            <body
+                className={cn(
+                    "min-h-screen bg-background font-sans antialiased",
+                    inter.variable,
+                    manrope.variable
+                )}
+            >
+                {children}
+                <Toaster />
+            </body>
+        </html>
+    );
 }

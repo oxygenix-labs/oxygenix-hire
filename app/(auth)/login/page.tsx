@@ -1,6 +1,6 @@
-import Link from "next/link"
-import React, { Suspense } from 'react'
-import { LoginForm } from "@/components/auth/login-form"
+import Link from "next/link";
+import React, { Suspense } from "react";
+import { LoginForm } from "@/components/auth/login-form";
 
 export default function LoginPage() {
     return (
@@ -22,14 +22,16 @@ export default function LoginPage() {
                 <div className="relative z-20 mt-20">
                     <h2 className="text-3xl font-bold mb-6">Welcome back.</h2>
                     <p className="text-lg/relaxed opacity-90 mb-8 max-w-sm">
-                        Log in to manage your hiring pipeline, review candidates, and schedule interviews.
+                        Log in to manage your hiring pipeline, review candidates, and schedule
+                        interviews.
                     </p>
                 </div>
 
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-2">
                         <p className="text-lg">
-                            &ldquo;We reduced our time-to-hire by 50% using Oxygenix. It's the only tool we need.&rdquo;
+                            &ldquo;We reduced our time-to-hire by 50% using Oxygenix. It's the only
+                            tool we need.&rdquo;
                         </p>
                         <footer className="text-sm">Alex Chen, VP of Engineering</footer>
                     </blockquote>
@@ -50,12 +52,15 @@ export default function LoginPage() {
                     </Suspense>
                     <p className="px-8 text-center text-sm text-muted-foreground">
                         Don&apos;t have an account?{" "}
-                        <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
+                        <Link
+                            href="/signup"
+                            className="underline underline-offset-4 hover:text-primary"
+                        >
                             Sign up
                         </Link>
                     </p>
                 </div>
             </div>
         </div>
-    )
+    );
 }

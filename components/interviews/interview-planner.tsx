@@ -1,86 +1,92 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Textarea } from "@/components/ui/textarea"
-import { Wand2, Save, Copy, Check } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Wand2, Save, Copy, Check } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface Candidate {
-    _id: string
-    firstName: string
-    lastName: string
-    jobId: { _id: string, title: string }
+    _id: string;
+    firstName: string;
+    lastName: string;
+    jobId: { _id: string; title: string };
 }
 
 interface InterviewPlannerProps {
-    candidates: Candidate[]
+    candidates: Candidate[];
 }
 
 const QUESTIONS_TEMPLATE = {
-    "phone": [
+    phone: [
         "Tell me about yourself.",
         "Why do you want to join our company?",
         "What are your salary expectations?",
-        "What is your notice period?"
+        "What is your notice period?",
     ],
-    "technical": [
+    technical: [
         "Explain the request-response cycle.",
         "How do you optimize a React application?",
         "Explain closure in JavaScript.",
-        "What is the difference between SQL and NoSQL?"
+        "What is the difference between SQL and NoSQL?",
     ],
-    "behavioral": [
+    behavioral: [
         "Describe a challenging situation and how you handled it.",
         "Give an example of a goal you reached and tell me how you achieved it.",
-        "Describe a time you had to manage conflicting priorities."
+        "Describe a time you had to manage conflicting priorities.",
     ],
     "system-design": [
         "Design a URL shortener like bit.ly.",
         "Design a chat system like WhatsApp.",
-        "How would you scale a notification service?"
-    ]
-}
+        "How would you scale a notification service?",
+    ],
+};
 
 export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
-    const router = useRouter()
-    const [selectedCandidateId, setSelectedCandidateId] = useState<string>("")
-    const [type, setType] = useState<string>("phone")
-    const [questions, setQuestions] = useState<string[]>([])
-    const [notes, setNotes] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
-    const [copied, setCopied] = useState(false)
+    const router = useRouter();
+    const [selectedCandidateId, setSelectedCandidateId] = useState<string>("");
+    const [type, setType] = useState<string>("phone");
+    const [questions, setQuestions] = useState<string[]>([]);
+    const [notes, setNotes] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [copied, setCopied] = useState(false);
 
     // Helper to find selected candidate
-    const selectedCandidate = candidates.find(c => c._id === selectedCandidateId)
+    const selectedCandidate = candidates.find((c) => c._id === selectedCandidateId);
 
     const generateQuestions = () => {
         // Mock AI generation
-        if (!selectedCandidate) return
+        if (!selectedCandidate) return;
 
         // In a real app, this would call an API
-        const template = QUESTIONS_TEMPLATE[type as keyof typeof QUESTIONS_TEMPLATE]
+        const template = QUESTIONS_TEMPLATE[type as keyof typeof QUESTIONS_TEMPLATE];
         if (template) {
-            setQuestions(template)
+            setQuestions(template);
         }
-    }
+    };
 
     const handleCopy = () => {
-        const text = questions.map(q => `- ${q}`).join("\n")
-        navigator.clipboard.writeText(text)
-        setCopied(true)
-        setTimeout(() => setCopied(false), 2000)
-    }
+        const text = questions.map((q) => `- ${q}`).join("\n");
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     const handleSave = async () => {
-        if (!selectedCandidate) return
-        setIsLoading(true)
+        if (!selectedCandidate) return;
+        setIsLoading(true);
         try {
             const response = await fetch("/api/interviews", {
                 method: "POST",
@@ -92,21 +98,21 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                     questions,
                     notes,
                     date: new Date().toISOString(), // Default to now for planning
-                })
-            })
+                }),
+            });
 
             if (!response.ok) {
-                throw new Error("Failed to save plan")
+                throw new Error("Failed to save plan");
             }
 
-            router.push("/dashboard/interviews")
-            router.refresh()
+            router.push("/dashboard/interviews");
+            router.refresh();
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     return (
         <div className="grid gap-6 md:grid-cols-2">
@@ -125,7 +131,8 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                             <SelectContent>
                                 {candidates.map((c) => (
                                     <SelectItem key={c._id} value={c._id}>
-                                        {c.firstName} {c.lastName} ({c.jobId?.title || "Unknown Job"})
+                                        {c.firstName} {c.lastName} (
+                                        {c.jobId?.title || "Unknown Job"})
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -134,7 +141,12 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
 
                     <div className="space-y-4">
                         <Label>Interview Type</Label>
-                        <Tabs defaultValue="phone" value={type} onValueChange={setType} className="w-full">
+                        <Tabs
+                            defaultValue="phone"
+                            value={type}
+                            onValueChange={setType}
+                            className="w-full"
+                        >
                             <TabsList className="grid w-full grid-cols-2 lg:grid-cols-4">
                                 <TabsTrigger value="phone">Phone</TabsTrigger>
                                 <TabsTrigger value="technical">Tech</TabsTrigger>
@@ -163,12 +175,18 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                     <div className="space-y-1">
                         <CardTitle>Interview Plan</CardTitle>
                         <CardDescription>
-                            {questions.length > 0 ? `${questions.length} questions generated` : "No questions yet"}
+                            {questions.length > 0
+                                ? `${questions.length} questions generated`
+                                : "No questions yet"}
                         </CardDescription>
                     </div>
                     {questions.length > 0 && (
                         <Button variant="outline" size="icon" onClick={handleCopy}>
-                            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
+                            {copied ? (
+                                <Check className="h-4 w-4 text-green-500" />
+                            ) : (
+                                <Copy className="h-4 w-4" />
+                            )}
                         </Button>
                     )}
                 </CardHeader>
@@ -182,8 +200,13 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                         <div className="space-y-6">
                             <ul className="space-y-3">
                                 {questions.map((q, i) => (
-                                    <li key={i} className="flex gap-3 p-3 bg-muted/30 rounded-md text-sm border">
-                                        <span className="font-mono text-muted-foreground font-bold">{i + 1}.</span>
+                                    <li
+                                        key={i}
+                                        className="flex gap-3 p-3 bg-muted/30 rounded-md text-sm border"
+                                    >
+                                        <span className="font-mono text-muted-foreground font-bold">
+                                            {i + 1}.
+                                        </span>
                                         <span>{q}</span>
                                     </li>
                                 ))}
@@ -207,7 +230,9 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                         disabled={questions.length === 0 || isLoading}
                         className="w-full mt-4"
                     >
-                        {isLoading ? "Saving..." : (
+                        {isLoading ? (
+                            "Saving..."
+                        ) : (
                             <>
                                 <Save className="mr-2 h-4 w-4" />
                                 Save Interview Plan
@@ -217,5 +242,5 @@ export function InterviewPlanner({ candidates }: InterviewPlannerProps) {
                 </div>
             </Card>
         </div>
-    )
+    );
 }

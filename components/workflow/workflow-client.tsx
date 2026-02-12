@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { WorkflowLayout } from "@/components/workflow/workflow-layout"
-import { Step1JobDescription } from "@/components/workflow/step-1-jd"
-import { Step2ResumeScreening } from "@/components/workflow/step-2-screening"
-import { Step3InterviewPlanning } from "@/components/workflow/step-3-interview"
-import { Step4HiringDecision } from "@/components/workflow/step-4-decision"
-import { Step5Offer } from "@/components/workflow/step-5-offer"
+import { useRouter } from "next/navigation";
+import { WorkflowLayout } from "@/components/workflow/workflow-layout";
+import { Step1JobDescription } from "@/components/workflow/step-1-jd";
+import { Step2ResumeScreening } from "@/components/workflow/step-2-screening";
+import { Step3InterviewPlanning } from "@/components/workflow/step-3-interview";
+import { Step4HiringDecision } from "@/components/workflow/step-4-decision";
+import { Step5Offer } from "@/components/workflow/step-5-offer";
 
 interface WorkflowClientProps {
-    job: any
+    job: any;
 }
 
 export function WorkflowClient({ job }: WorkflowClientProps) {
-    const router = useRouter()
-    const currentStep = job.workflow.currentStep
+    const router = useRouter();
+    const currentStep = job.workflow.currentStep;
 
     const handleComplete = () => {
-        router.refresh()
-    }
+        router.refresh();
+    };
 
     return (
         <WorkflowLayout currentStep={currentStep} jobId={job._id}>
@@ -58,5 +58,5 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
                 />
             )}
         </WorkflowLayout>
-    )
+    );
 }

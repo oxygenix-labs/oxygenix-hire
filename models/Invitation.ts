@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const InvitationSchema = new Schema(
     {
@@ -9,13 +9,13 @@ const InvitationSchema = new Schema(
         },
         organizationId: {
             type: Schema.Types.ObjectId,
-            ref: 'Organization',
+            ref: "Organization",
             required: true,
         },
         role: {
             type: String,
-            enum: ['admin', 'member', 'recruiter'],
-            default: 'member',
+            enum: ["admin", "member", "recruiter"],
+            default: "member",
         },
         token: {
             type: String,
@@ -24,8 +24,8 @@ const InvitationSchema = new Schema(
         },
         status: {
             type: String,
-            enum: ['pending', 'accepted', 'expired'],
-            default: 'pending',
+            enum: ["pending", "accepted", "expired"],
+            default: "pending",
         },
         expiresAt: {
             type: Date,
@@ -33,15 +33,15 @@ const InvitationSchema = new Schema(
         },
         invitedBy: {
             type: Schema.Types.ObjectId,
-            ref: 'User',
+            ref: "User",
             required: true,
-        }
+        },
     },
     {
         timestamps: true,
     }
 );
 
-const Invitation = models.Invitation || model('Invitation', InvitationSchema);
+const Invitation = models.Invitation || model("Invitation", InvitationSchema);
 
 export default Invitation;

@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-import { Button } from "@/components/ui/button"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -12,40 +12,40 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/select";
+import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const orgFormSchema = z.object({
     name: z.string().min(2).max(100),
     industry: z.string().optional(),
     companySize: z.string().optional(),
     website: z.string().url().optional().or(z.literal("")),
-})
+});
 
-type OrgFormValues = z.infer<typeof orgFormSchema>
+type OrgFormValues = z.infer<typeof orgFormSchema>;
 
 interface OrgFormProps {
     organization: {
-        name: string
-        industry?: string
-        companySize?: string
-        website?: string
-    }
+        name: string;
+        industry?: string;
+        companySize?: string;
+        website?: string;
+    };
 }
 
 export function OrgForm({ organization }: OrgFormProps) {
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<OrgFormValues>({
         resolver: zodResolver(orgFormSchema),
@@ -55,32 +55,32 @@ export function OrgForm({ organization }: OrgFormProps) {
             companySize: organization.companySize || "1-10",
             website: organization.website || "",
         },
-    })
+    });
 
     async function onSubmit(data: OrgFormValues) {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
             const response = await fetch("/api/settings/org", {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(data),
-            })
+            });
 
-            if (!response.ok) throw new Error("Failed to update organization")
+            if (!response.ok) throw new Error("Failed to update organization");
 
             toast({
                 title: "Organization updated",
                 description: "Your organization settings have been updated.",
-            })
-            router.refresh()
+            });
+            router.refresh();
         } catch (error) {
             toast({
                 title: "Error",
                 description: "Something went wrong. Please try again.",
                 variant: "destructive",
-            })
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
@@ -176,5 +176,5 @@ export function OrgForm({ organization }: OrgFormProps) {
                 </Button>
             </form>
         </Form>
-    )
+    );
 }

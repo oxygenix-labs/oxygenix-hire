@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -13,24 +13,24 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Switch } from "@/components/ui/switch"
-import { toast } from "@/components/ui/use-toast"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+} from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const notificationsFormSchema = z.object({
     newApplication: z.boolean().default(false).optional(),
     interviewScheduled: z.boolean().default(false).optional(),
     offerAccepted: z.boolean().default(false).optional(),
     marketingEmails: z.boolean().default(false).optional(),
-})
+});
 
-type NotificationsFormValues = z.infer<typeof notificationsFormSchema>
+type NotificationsFormValues = z.infer<typeof notificationsFormSchema>;
 
 export function NotificationsForm() {
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
 
     const form = useForm<NotificationsFormValues>({
         resolver: zodResolver(notificationsFormSchema),
@@ -40,10 +40,10 @@ export function NotificationsForm() {
             offerAccepted: true,
             marketingEmails: false,
         },
-    })
+    });
 
     async function onSubmit(data: NotificationsFormValues) {
-        setIsLoading(true)
+        setIsLoading(true);
         // Mock API call
         setTimeout(() => {
             toast({
@@ -53,9 +53,9 @@ export function NotificationsForm() {
                         <code className="text-white">{JSON.stringify(data, null, 2)}</code>
                     </pre>
                 ),
-            })
-            setIsLoading(false)
-        }, 500)
+            });
+            setIsLoading(false);
+        }, 500);
     }
 
     return (
@@ -135,5 +135,5 @@ export function NotificationsForm() {
                 </Button>
             </form>
         </Form>
-    )
+    );
 }

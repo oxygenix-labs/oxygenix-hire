@@ -9,17 +9,17 @@ import PricingSection from "@/components/features/landing/pricing-section";
 import Footer from "@/components/shared/footer";
 
 export default function Home() {
-  return (
-    <main className="min-h-screen bg-background">
-      <Navbar />
-      <Hero />
-      <TrustStrip />
-      <ProblemSection />
-      <SolutionSection />
-      <FeaturesGrid />
-      <ProductPreview />
-      <PricingSection />
-      <Footer />
-    </main>
-  );
+    return (
+        <main className="min-h-screen bg-background">
+            <Navbar />
+            <Hero />
+            <TrustStrip />
+            <ProblemSection />
+            <SolutionSection />
+            <FeaturesGrid />
+            <ProductPreview />
+            <PricingSection />
+            <Footer />
+        </main>
+    );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 import {
     Table,
     TableBody,
@@ -9,7 +9,7 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
     Dialog,
     DialogContent,
@@ -18,104 +18,111 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Trash2, UserPlus, Mail } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
+} from "@/components/ui/select";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Trash2, UserPlus, Mail } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 interface TeamMember {
-    _id: string
-    name: string
-    email: string
-    role: string
-    image?: string
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    image?: string;
 }
 
 interface Invitation {
-    _id: string
-    email: string
-    role: string
-    status: string
+    _id: string;
+    email: string;
+    role: string;
+    status: string;
 }
 
 export function TeamList() {
-    const [members, setMembers] = useState<TeamMember[]>([])
-    const [invitations, setInvitations] = useState<Invitation[]>([])
-    const [loading, setLoading] = useState(true)
-    const [inviteOpen, setInviteOpen] = useState(false)
-    const [inviteEmail, setInviteEmail] = useState("")
-    const [inviteRole, setInviteRole] = useState("member")
-    const [isInviting, setIsInviting] = useState(false)
+    const [members, setMembers] = useState<TeamMember[]>([]);
+    const [invitations, setInvitations] = useState<Invitation[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [inviteOpen, setInviteOpen] = useState(false);
+    const [inviteEmail, setInviteEmail] = useState("");
+    const [inviteRole, setInviteRole] = useState("member");
+    const [isInviting, setIsInviting] = useState(false);
 
     const fetchTeam = async () => {
         try {
-            const res = await fetch("/api/settings/team")
+            const res = await fetch("/api/settings/team");
             if (res.ok) {
-                const data = await res.json()
-                setMembers(data.members)
-                setInvitations(data.invitations)
+                const data = await res.json();
+                setMembers(data.members);
+                setInvitations(data.invitations);
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchTeam()
-    }, [])
+        fetchTeam();
+    }, []);
 
     const handleInvite = async () => {
-        setIsInviting(true)
+        setIsInviting(true);
         try {
             const res = await fetch("/api/settings/team", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email: inviteEmail, role: inviteRole }),
-            })
+            });
 
             if (!res.ok) {
-                if (res.status === 409) throw new Error("User already invited or member")
-                throw new Error("Failed to invite")
+                if (res.status === 409) throw new Error("User already invited or member");
+                throw new Error("Failed to invite");
             }
 
-            toast({ title: "Invitation sent", description: `Invited ${inviteEmail} as ${inviteRole}` })
-            setInviteOpen(false)
-            setInviteEmail("")
-            fetchTeam()
+            toast({
+                title: "Invitation sent",
+                description: `Invited ${inviteEmail} as ${inviteRole}`,
+            });
+            setInviteOpen(false);
+            setInviteEmail("");
+            fetchTeam();
         } catch (error: any) {
-            toast({ title: "Error", description: error.message, variant: "destructive" })
+            toast({ title: "Error", description: error.message, variant: "destructive" });
         } finally {
-            setIsInviting(false)
+            setIsInviting(false);
         }
-    }
+    };
 
     const handleRemove = async (id: string) => {
-        if (!confirm("Are you sure you want to remove this member?")) return
+        if (!confirm("Are you sure you want to remove this member?")) return;
 
         try {
-            const res = await fetch(`/api/settings/team?id=${id}`, { method: "DELETE" })
-            if (!res.ok) throw new Error("Failed to remove")
+            const res = await fetch(`/api/settings/team?id=${id}`, { method: "DELETE" });
+            if (!res.ok) throw new Error("Failed to remove");
 
-            toast({ title: "Member removed" })
-            fetchTeam()
+            toast({ title: "Member removed" });
+            fetchTeam();
         } catch (error) {
-            toast({ title: "Error", description: "Could not remove member", variant: "destructive" })
+            toast({
+                title: "Error",
+                description: "Could not remove member",
+                variant: "destructive",
+            });
         }
-    }
+    };
 
-    if (loading) return <div>Loading team...</div>
+    if (loading) return <div>Loading team...</div>;
 
     return (
         <div className="space-y-6">
@@ -138,7 +145,12 @@ export function TeamList() {
                         <div className="grid gap-4 py-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} placeholder="colleague@example.com" />
+                                <Input
+                                    id="email"
+                                    value={inviteEmail}
+                                    onChange={(e) => setInviteEmail(e.target.value)}
+                                    placeholder="colleague@example.com"
+                                />
                             </div>
                             <div className="grid gap-2">
                                 <Label htmlFor="role">Role</Label>
@@ -155,7 +167,9 @@ export function TeamList() {
                             </div>
                         </div>
                         <DialogFooter>
-                            <Button variant="outline" onClick={() => setInviteOpen(false)}>Cancel</Button>
+                            <Button variant="outline" onClick={() => setInviteOpen(false)}>
+                                Cancel
+                            </Button>
                             <Button onClick={handleInvite} disabled={!inviteEmail || isInviting}>
                                 {isInviting ? "Sending..." : "Send Invite"}
                             </Button>
@@ -183,12 +197,18 @@ export function TeamList() {
                                     </Avatar>
                                     <div className="flex flex-col">
                                         <span className="font-medium">{member.name}</span>
-                                        <span className="text-xs text-muted-foreground">{member.email}</span>
+                                        <span className="text-xs text-muted-foreground">
+                                            {member.email}
+                                        </span>
                                     </div>
                                 </TableCell>
                                 <TableCell className="capitalize">{member.role}</TableCell>
                                 <TableCell className="text-right">
-                                    <Button variant="ghost" size="icon" onClick={() => handleRemove(member._id)}>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={() => handleRemove(member._id)}
+                                    >
                                         <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                                     </Button>
                                 </TableCell>
@@ -200,7 +220,9 @@ export function TeamList() {
 
             {invitations.length > 0 && (
                 <div className="space-y-4">
-                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Pending Invitations</h4>
+                    <h4 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                        Pending Invitations
+                    </h4>
                     <div className="rounded-md border">
                         <Table>
                             <TableBody>
@@ -212,7 +234,9 @@ export function TeamList() {
                                             </div>
                                             <div className="flex flex-col">
                                                 <span className="font-medium">{invite.email}</span>
-                                                <span className="text-xs text-muted-foreground">Expires in 7 days</span>
+                                                <span className="text-xs text-muted-foreground">
+                                                    Expires in 7 days
+                                                </span>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -229,5 +253,5 @@ export function TeamList() {
                 </div>
             )}
         </div>
-    )
+    );
 }

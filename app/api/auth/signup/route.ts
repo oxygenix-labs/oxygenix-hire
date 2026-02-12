@@ -1,16 +1,16 @@
-import { NextResponse } from 'next/server';
-import bcrypt from 'bcryptjs';
-import connectToDatabase from '@/lib/db';
-import User from '@/models/User';
-import Organization from '@/models/Organization';
-import Membership from '@/models/Membership';
-import { z } from 'zod';
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import connectToDatabase from "@/lib/db";
+import User from "@/models/User";
+import Organization from "@/models/Organization";
+import Membership from "@/models/Membership";
+import { z } from "zod";
 
 const signupSchema = z.object({
-    name: z.string().min(2, 'Name must be at least 2 characters'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(8, 'Password must be at least 8 characters'),
-    companyName: z.string().min(2, 'Company name must be at least 2 characters'),
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    companyName: z.string().min(2, "Company name must be at least 2 characters"),
 });
 
 export async function POST(req: Request) {
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         const existingUser = await User.findOne({ email: validatedData.email });
         if (existingUser) {
             return NextResponse.json(
-                { error: 'User with this email already exists' },
+                { error: "User with this email already exists" },
                 { status: 400 }
             );
         }
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
         const organization = await Organization.create({
             name: validatedData.companyName,
-            plan: 'free_trial',
+            plan: "free_trial",
             trialEndsAt,
         });
 
@@ -45,7 +45,7 @@ export async function POST(req: Request) {
             name: validatedData.name,
             email: validatedData.email,
             password: hashedPassword,
-            role: 'owner', // System role
+            role: "owner", // System role
             organizationId: organization._id, // Default active org
             companyName: validatedData.companyName,
             onboardingCompleted: true,
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
         await Membership.create({
             userId: user._id,
             organizationId: organization._id,
-            role: 'owner',
+            role: "owner",
         });
 
         // Add user to organization members array (legacy support / quick access)
@@ -63,22 +63,21 @@ export async function POST(req: Request) {
         await organization.save();
 
         return NextResponse.json(
-            { message: 'User created successfully', userId: user._id },
+            { message: "User created successfully", userId: user._id },
             { status: 201 }
         );
     } catch (error: any) {
-        console.error('Signup error:', error);
-        if (error && typeof error === 'object' && 'errors' in error && Array.isArray(error.errors)) {
-            const errorMessage = error.errors[0]?.message || 'Validation error';
-            return NextResponse.json(
-                { error: errorMessage },
-                { status: 400 }
-            );
+        console.error("Signup error:", error);
+        if (
+            error &&
+            typeof error === "object" &&
+            "errors" in error &&
+            Array.isArray(error.errors)
+        ) {
+            const errorMessage = error.errors[0]?.message || "Validation error";
+            return NextResponse.json({ error: errorMessage }, { status: 400 });
         }
 
-        return NextResponse.json(
-            { error: 'Internal server error' },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
     }
 }

@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { Check, ChevronRight, Lock } from "lucide-react"
-import { cn } from "@/lib/utils"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { Check, ChevronRight, Lock } from "lucide-react";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface WorkflowLayoutProps {
-    currentStep: number // 1-5
-    jobId: string
-    children: React.ReactNode
+    currentStep: number; // 1-5
+    jobId: string;
+    children: React.ReactNode;
 }
 
 const steps = [
@@ -17,10 +17,10 @@ const steps = [
     { number: 3, title: "Interview Planning", id: "interviewPlanning" },
     { number: 4, title: "Hiring Decision", id: "hiringDecision" },
     { number: 5, title: "Offer & Close", id: "offer" },
-]
+];
 
 export function WorkflowLayout({ currentStep, jobId, children }: WorkflowLayoutProps) {
-    const pathname = usePathname()
+    const pathname = usePathname();
 
     return (
         <div className="flex flex-col space-y-8 p-8">
@@ -29,18 +29,23 @@ export function WorkflowLayout({ currentStep, jobId, children }: WorkflowLayoutP
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-muted -z-10 -translate-y-1/2" />
                 <div className="flex justify-between w-full max-w-4xl mx-auto">
                     {steps.map((step) => {
-                        const isCompleted = step.number < currentStep
-                        const isCurrent = step.number === currentStep
-                        const isLocked = step.number > currentStep
+                        const isCompleted = step.number < currentStep;
+                        const isCurrent = step.number === currentStep;
+                        const isLocked = step.number > currentStep;
 
                         return (
-                            <div key={step.number} className="flex flex-col items-center gap-2 bg-background px-2">
+                            <div
+                                key={step.number}
+                                className="flex flex-col items-center gap-2 bg-background px-2"
+                            >
                                 <div
                                     className={cn(
                                         "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all",
-                                        isCompleted && "border-primary bg-primary text-primary-foreground",
+                                        isCompleted &&
+                                            "border-primary bg-primary text-primary-foreground",
                                         isCurrent && "border-primary ring-4 ring-primary/20",
-                                        isLocked && "border-muted-foreground/30 text-muted-foreground"
+                                        isLocked &&
+                                            "border-muted-foreground/30 text-muted-foreground"
                                     )}
                                 >
                                     {isCompleted ? (
@@ -60,7 +65,7 @@ export function WorkflowLayout({ currentStep, jobId, children }: WorkflowLayoutP
                                     {step.title}
                                 </span>
                             </div>
-                        )
+                        );
                     })}
                 </div>
             </div>
@@ -70,5 +75,5 @@ export function WorkflowLayout({ currentStep, jobId, children }: WorkflowLayoutP
                 {children}
             </div>
         </div>
-    )
+    );
 }

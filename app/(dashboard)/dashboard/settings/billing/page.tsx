@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
@@ -8,9 +8,9 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
-} from "@/components/ui/card"
-import { Check, CreditCard, Zap } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/card";
+import { Check, CreditCard, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default function BillingPage() {
     return (
@@ -20,9 +20,13 @@ export default function BillingPage() {
                     <div className="flex items-center justify-between">
                         <div>
                             <CardTitle>Current Plan</CardTitle>
-                            <CardDescription>You are currently on the <strong>Free Trial</strong> plan.</CardDescription>
+                            <CardDescription>
+                                You are currently on the <strong>Free Trial</strong> plan.
+                            </CardDescription>
                         </div>
-                        <Badge variant="secondary" className="px-4 py-1 text-sm">Active</Badge>
+                        <Badge variant="secondary" className="px-4 py-1 text-sm">
+                            Active
+                        </Badge>
                     </div>
                 </CardHeader>
                 <CardContent className="grid gap-6">
@@ -54,21 +58,29 @@ export default function BillingPage() {
                     <p className="text-sm text-muted-foreground">
                         Payment method: **** 4242 <span>(Expires 12/28)</span>
                     </p>
-                    <Button variant="ghost" size="sm" className="h-auto p-0 text-primary">Update details</Button>
+                    <Button variant="ghost" size="sm" className="h-auto p-0 text-primary">
+                        Update details
+                    </Button>
                 </CardFooter>
             </Card>
 
             <div className="grid md:grid-cols-2 gap-6">
-                <Card >
+                <Card>
                     <CardHeader>
                         <CardTitle>Pro Plan</CardTitle>
                         <CardDescription>$29/month per user</CardDescription>
                     </CardHeader>
                     <CardContent>
                         <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> 10 Active Jobs</li>
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> Unlimited Candidates</li>
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500" /> Advanced Analytics</li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-green-500" /> 10 Active Jobs
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-green-500" /> Unlimited Candidates
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-green-500" /> Advanced Analytics
+                            </li>
                         </ul>
                     </CardContent>
                     <CardFooter>
@@ -83,16 +95,24 @@ export default function BillingPage() {
                     </CardHeader>
                     <CardContent>
                         <ul className="space-y-2 text-sm">
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Unlimited Jobs</li>
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> SSO & Audit Logs</li>
-                            <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" /> Dedicated Success Manager</li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-primary" /> Unlimited Jobs
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-primary" /> SSO & Audit Logs
+                            </li>
+                            <li className="flex items-center gap-2">
+                                <Check className="h-4 w-4 text-primary" /> Dedicated Success Manager
+                            </li>
                         </ul>
                     </CardContent>
                     <CardFooter>
-                        <Button variant="outline" className="w-full">Contact Sales</Button>
+                        <Button variant="outline" className="w-full">
+                            Contact Sales
+                        </Button>
                     </CardFooter>
                 </Card>
             </div>
         </div>
-    )
+    );
 }

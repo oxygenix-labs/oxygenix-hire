@@ -1,10 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertCircle, Clock, DollarSign, FileText } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertCircle, Clock, DollarSign, FileText } from "lucide-react";
 
 const problems = [
     {
         title: "Resumes exaggerate skills",
-        description: "Manual screening misses the truth. Candidates optimize for keywords, not actual ability.",
+        description:
+            "Manual screening misses the truth. Candidates optimize for keywords, not actual ability.",
         icon: FileText,
     },
     {
@@ -14,15 +15,17 @@ const problems = [
     },
     {
         title: "Decisions rely on gut feeling",
-        description: "Without data, hiring becomes a game of chance rather than a predictable process.",
+        description:
+            "Without data, hiring becomes a game of chance rather than a predictable process.",
         icon: Clock,
     },
     {
         title: "Recruiters are expensive",
-        description: "Agency fees eat into your budget. Traditional hiring helps agencies, not you.",
+        description:
+            "Agency fees eat into your budget. Traditional hiring helps agencies, not you.",
         icon: DollarSign,
     },
-]
+];
 
 const ProblemSection = () => {
     return (
@@ -39,7 +42,10 @@ const ProblemSection = () => {
 
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                     {problems.map((problem, index) => (
-                        <Card key={index} className="bg-muted/30 border-none shadow-none hover:bg-muted/50 transition-colors">
+                        <Card
+                            key={index}
+                            className="bg-muted/30 border-none shadow-none hover:bg-muted/50 transition-colors"
+                        >
                             <CardHeader>
                                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4 text-primary">
                                     <problem.icon className="w-6 h-6" />
@@ -47,16 +53,14 @@ const ProblemSection = () => {
                                 <CardTitle className="text-xl">{problem.title}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                                <p className="text-muted-foreground">
-                                    {problem.description}
-                                </p>
+                                <p className="text-muted-foreground">{problem.description}</p>
                             </CardContent>
                         </Card>
                     ))}
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default ProblemSection
+export default ProblemSection;

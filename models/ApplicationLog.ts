@@ -1,15 +1,15 @@
-import mongoose, { Schema, model, models } from 'mongoose';
+import mongoose, { Schema, model, models } from "mongoose";
 
 const ApplicationLogSchema = new Schema(
     {
         candidateId: {
             type: Schema.Types.ObjectId,
-            ref: 'Candidate',
+            ref: "Candidate",
             required: true,
         },
         organizationId: {
             type: Schema.Types.ObjectId,
-            ref: 'Organization',
+            ref: "Organization",
             required: true,
         },
         previousStage: {
@@ -22,18 +22,18 @@ const ApplicationLogSchema = new Schema(
         },
         changedBy: {
             type: Schema.Types.ObjectId, // User ID
-            ref: 'User',
+            ref: "User",
             required: true,
         },
         note: {
             type: String, // Optional note for the change
-        }
+        },
     },
     {
         timestamps: true,
     }
 );
 
-const ApplicationLog = models.ApplicationLog || model('ApplicationLog', ApplicationLogSchema);
+const ApplicationLog = models.ApplicationLog || model("ApplicationLog", ApplicationLogSchema);
 
 export default ApplicationLog;

@@ -1,5 +1,5 @@
-import { CreateJobForm } from "@/components/jobs/create-job-form"
-import { Separator } from "@/components/ui/separator"
+import { CreateJobForm } from "@/components/jobs/create-job-form";
+import { Separator } from "@/components/ui/separator";
 
 export default function CreateJobPage() {
     return (
@@ -13,5 +13,5 @@ export default function CreateJobPage() {
             <Separator />
             <CreateJobForm />
         </div>
-    )
+    );
 }

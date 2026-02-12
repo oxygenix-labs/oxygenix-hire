@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useActionState } from 'react';
-import { useFormStatus } from 'react-dom';
-import { authenticate } from '@/lib/actions/auth';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Loader2, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
+import { authenticate } from "@/lib/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Loader2, AlertCircle } from "lucide-react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export function LoginForm() {
     const [errorMessage, dispatch] = useActionState(authenticate, undefined);
     const searchParams = useSearchParams();
-    const registered = searchParams.get('registered');
+    const registered = searchParams.get("registered");
 
     return (
         <form action={dispatch} className="grid gap-4">
@@ -25,13 +25,7 @@ export function LoginForm() {
 
             <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="m@example.com"
-                    required
-                />
+                <Input id="email" type="email" name="email" placeholder="m@example.com" required />
             </div>
             <div className="grid gap-2">
                 <div className="flex items-center">
@@ -61,11 +55,7 @@ export function LoginForm() {
             </div>
 
             {errorMessage && (
-                <div
-                    className="flex h-8 items-end space-x-1"
-                    aria-live="polite"
-                    aria-atomic="true"
-                >
+                <div className="flex h-8 items-end space-x-1" aria-live="polite" aria-atomic="true">
                     <AlertCircle className="h-5 w-5 text-red-500" />
                     <p className="text-sm text-red-500">{errorMessage}</p>
                 </div>

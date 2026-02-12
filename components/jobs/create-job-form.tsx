@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import * as z from "zod"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
     Form,
     FormControl,
@@ -15,17 +15,28 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Loader2 } from "lucide-react"
-import { Editor } from "@/components/ui/editor"
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Loader2, Sparkles, Wand2, Check, ExternalLink, Cpu, Eye } from "lucide-react";
+import { Editor } from "@/components/ui/editor";
+import { toast } from "@/components/ui/use-toast";
+import { Card, CardContent } from "@/components/ui/card";
 
 const jobFormSchema = z.object({
     title: z.string().min(2, {
@@ -37,9 +48,14 @@ const jobFormSchema = z.object({
     description: z.string().min(10, {
         message: "Description must be at least 10 characters.",
     }),
-})
+    // AI Fields
+    experienceLevel: z.string().optional(),
+    skills: z.string().optional(),
+    responsibilities: z.string().optional(),
+    companyContext: z.string().optional(),
+});
 
-type JobFormValues = z.infer<typeof jobFormSchema>
+type JobFormValues = z.infer<typeof jobFormSchema>;
 
 const defaultValues: JobFormValues = {
     title: "",
@@ -47,19 +63,101 @@ const defaultValues: JobFormValues = {
     location: "Remote",
     status: "draft",
     description: "",
-}
+    experienceLevel: "Mid-Level",
+    skills: "",
+    responsibilities: "",
+    companyContext: "",
+};
+
+const promptOptions = [
+    {
+        id: "fast",
+        title: "Fast JD",
+        description: "Standard structure, quick and clean.",
+        icon: "⚡",
+    },
+    {
+        id: "outcome",
+        title: "Outcome-Focused",
+        description: "Emphasizes results, impact, and deliverables.",
+        icon: "🎯",
+    },
+    {
+        id: "high-signal",
+        title: "High-Signal",
+        description: "No fluff. Direct, hard requirements only.",
+        icon: "📶",
+    },
+    {
+        id: "culture",
+        title: "Culture-Focused",
+        description: "Highlights values, team vibe, and mission.",
+        icon: "🌱",
+    },
+];
 
 export function CreateJobForm() {
-    const router = useRouter()
-    const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter();
+    const [isLoading, setIsLoading] = useState(false);
+    const [aiOpen, setAiOpen] = useState(false);
+    const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null);
+    const [selectedProvider, setSelectedProvider] = useState<"openai" | "gemini">("openai");
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [previewOpen, setPreviewOpen] = useState(false);
 
     const form = useForm<JobFormValues>({
         resolver: zodResolver(jobFormSchema),
         defaultValues,
-    })
+    });
+
+    const handleGenerate = async () => {
+        if (!selectedPrompt) return;
+        setIsGenerating(true);
+
+        try {
+            const values = form.getValues();
+            const res = await fetch("/api/ai/generate-jd", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    jobTitle: values.title,
+                    employmentType: values.type,
+                    location: values.location,
+                    experienceLevel: values.experienceLevel,
+                    skills: values.skills
+                        ?.split(",")
+                        .map((s) => s.trim())
+                        .filter(Boolean),
+                    responsibilities: values.responsibilities,
+                    companyContext: values.companyContext,
+                    promptType: selectedPrompt,
+                    llmProvider: selectedProvider,
+                }),
+            });
+
+            if (!res.ok) throw new Error("Generation failed");
+
+            const data = await res.json();
+            form.setValue("description", data.content, { shouldValidate: true });
+            setAiOpen(false);
+            const providerName = data.provider === "gemini" ? "Google Gemini" : "OpenAI";
+            toast({
+                title: "JD Generated",
+                description: `Review your new Job Description (Generated by ${providerName}).`,
+            });
+        } catch (error) {
+            toast({
+                title: "Error",
+                variant: "destructive",
+                description: "Failed to generate content.",
+            });
+        } finally {
+            setIsGenerating(false);
+        }
+    };
 
     async function onSubmit(data: JobFormValues) {
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
             const response = await fetch("/api/jobs", {
@@ -68,42 +166,65 @@ export function CreateJobForm() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
-            })
+            });
 
             if (!response.ok) {
-                throw new Error("Failed to create job")
+                throw new Error("Failed to create job");
             }
 
-            const job = await response.json()
+            const job = await response.json();
 
-            router.refresh()
-            router.push("/dashboard/jobs") // Adjust if you want to go to dashboard root or job list
+            toast({ title: "Success", description: "Job post created successfully." });
+            router.refresh();
+            router.push(`/dashboard/jobs/${job._id}/workflow`); // Redirect to workflow immediately? User flow choice.
         } catch (error) {
-            console.error(error)
+            console.error(error);
+            toast({
+                title: "Error",
+                variant: "destructive",
+                description: "Failed to create job post.",
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
-                    control={form.control}
-                    name="title"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Job Title</FormLabel>
-                            <FormControl>
-                                <Input placeholder="e.g. Senior Frontend Engineer" {...field} />
-                            </FormControl>
-                            <FormDescription>
-                                This is the public title of the job post.
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                {/* Basic Details Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                        control={form.control}
+                        name="title"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>
+                                    Job Title <span className="text-red-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. Senior Frontend Engineer" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="location"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>
+                                    Location <span className="text-red-500">*</span>
+                                </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="e.g. Remote, New York, NY" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
@@ -129,41 +250,139 @@ export function CreateJobForm() {
                             </FormItem>
                         )}
                     />
-
                     <FormField
                         control={form.control}
-                        name="location"
+                        name="experienceLevel"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Location</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="e.g. Remote, New York, NY" {...field} />
-                                </FormControl>
+                                <FormLabel>Experience Level (for AI)</FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Select Level" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        <SelectItem value="Junior">Junior</SelectItem>
+                                        <SelectItem value="Mid-Level">Mid-Level</SelectItem>
+                                        <SelectItem value="Senior">Senior</SelectItem>
+                                        <SelectItem value="Lead">Lead</SelectItem>
+                                        <SelectItem value="Executive">Executive</SelectItem>
+                                    </SelectContent>
+                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                 </div>
 
+                {/* AI Input Fields */}
+                <div className="space-y-4 border rounded-lg p-4 bg-muted/20">
+                    <div className="flex items-center justify-between">
+                        <h4 className="text-sm font-semibold flex items-center gap-2">
+                            <Sparkles className="h-4 w-4 text-purple-500" />
+                            AI Generation Details
+                        </h4>
+                        <span className="text-xs text-muted-foreground">
+                            Optional inputs to guide the AI
+                        </span>
+                    </div>
+
+                    <FormField
+                        control={form.control}
+                        name="skills"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Required Skills</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="e.g. React, Node.js, TypeScript (Comma separated)"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                            control={form.control}
+                            name="responsibilities"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Key Responsibilities</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="Briefly list key duties..."
+                                            className="min-h-[80px]"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="companyContext"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Company Context / Mission</FormLabel>
+                                    <FormControl>
+                                        <Textarea
+                                            placeholder="We are a fast-paced startup..."
+                                            className="min-h-[80px]"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <Button
+                        type="button"
+                        variant="secondary"
+                        className="w-full gap-2 text-purple-600 border-purple-200 bg-purple-50 hover:bg-purple-100"
+                        onClick={() => setAiOpen(true)}
+                    >
+                        <Wand2 className="h-4 w-4" />
+                        Generate Job Description with AI
+                    </Button>
+                </div>
+
+                {/* Description Editor */}
                 <FormField
                     control={form.control}
                     name="description"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Job Description</FormLabel>
+                            <div className="flex justify-between items-center mb-2">
+                                <FormLabel>Job Description</FormLabel>
+                                {field.value && field.value.length > 20 && (
+                                    <Button
+                                        type="button"
+                                        variant="ghost"
+                                        size="sm"
+                                        className="h-8 text-xs text-muted-foreground hover:text-purple-600"
+                                        onClick={() => setAiOpen(true)}
+                                    >
+                                        <Sparkles className="h-3 w-3 mr-1" />
+                                        Regenerate
+                                    </Button>
+                                )}
+                            </div>
                             <FormControl>
-                                {/* @ts-ignore - simpler prop passing for now */}
+                                {/* @ts-ignore */}
                                 <Editor value={field.value} onChange={field.onChange} />
                             </FormControl>
-                            <FormDescription>
-                                Describe the role, responsibilities, and requirements. Use the AI wand to auto-generate content.
-                            </FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 pt-4">
                     <Button type="submit" disabled={isLoading}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Create Job Post
@@ -172,15 +391,226 @@ export function CreateJobForm() {
                         type="button"
                         variant="outline"
                         onClick={() => {
-                            form.setValue("status", "draft")
-                            form.handleSubmit(onSubmit)()
+                            form.setValue("status", "draft");
+                            form.handleSubmit(onSubmit)();
                         }}
                         disabled={isLoading}
                     >
                         Save as Draft
                     </Button>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => setPreviewOpen(true)}
+                        disabled={!form.watch("title") || !form.watch("description")}
+                        className="gap-2"
+                    >
+                        <Eye className="h-4 w-4" />
+                        Preview
+                    </Button>
                 </div>
             </form>
+
+            {/* AI Modal */}
+            <Dialog open={aiOpen} onOpenChange={setAiOpen}>
+                <DialogContent className="max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>Choose AI Provider & Prompt Style</DialogTitle>
+                        <DialogDescription>
+                            Select your preferred AI model and how you want it to write the Job
+                            Description.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {/* LLM Provider Selector */}
+                    <div className="space-y-3 pb-4 border-b">
+                        <label className="text-sm font-medium flex items-center gap-2">
+                            <Cpu className="h-4 w-4" />
+                            AI Provider
+                        </label>
+                        <div className="grid grid-cols-2 gap-3">
+                            <div
+                                onClick={() => setSelectedProvider("openai")}
+                                className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
+                                    selectedProvider === "openai"
+                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                        : ""
+                                }`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="flex-1">
+                                        <div className="font-semibold text-sm">OpenAI</div>
+                                        <p className="text-xs text-muted-foreground">GPT-4o Mini</p>
+                                    </div>
+                                    {selectedProvider === "openai" && (
+                                        <Check className="h-4 w-4 text-primary" />
+                                    )}
+                                </div>
+                            </div>
+                            <div
+                                onClick={() => setSelectedProvider("gemini")}
+                                className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
+                                    selectedProvider === "gemini"
+                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                        : ""
+                                }`}
+                            >
+                                <div className="flex items-center gap-2">
+                                    <div className="flex-1">
+                                        <div className="font-semibold text-sm">Google Gemini</div>
+                                        <p className="text-xs text-muted-foreground">
+                                            Gemini 1.5 Flash
+                                        </p>
+                                    </div>
+                                    {selectedProvider === "gemini" && (
+                                        <Check className="h-4 w-4 text-primary" />
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Prompt Style Selector */}
+                    <div className="space-y-3">
+                        <label className="text-sm font-medium">Prompt Style</label>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+                            {promptOptions.map((option) => (
+                                <div
+                                    key={option.id}
+                                    onClick={() => setSelectedPrompt(option.id)}
+                                    className={`cursor-pointer border rounded-lg p-4 transition-all hover:border-primary hover:bg-muted/50 ${selectedPrompt === option.id ? "border-primary bg-primary/5 ring-1 ring-primary" : ""}`}
+                                >
+                                    <div className="flex items-start gap-3">
+                                        <div className="text-2xl">{option.icon}</div>
+                                        <div className="space-y-1">
+                                            <div className="font-semibold">{option.title}</div>
+                                            <p className="text-xs text-muted-foreground">
+                                                {option.description}
+                                            </p>
+                                        </div>
+                                        {selectedPrompt === option.id && (
+                                            <Check className="ml-auto h-4 w-4 text-primary" />
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAiOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button onClick={handleGenerate} disabled={!selectedPrompt || isGenerating}>
+                            {isGenerating ? (
+                                <>
+                                    <Wand2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Generating...
+                                </>
+                            ) : (
+                                <>
+                                    <Wand2 className="mr-2 h-4 w-4" />
+                                    Generate Draft
+                                </>
+                            )}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Preview Modal */}
+            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Job Post Preview</DialogTitle>
+                        <DialogDescription>
+                            This is how your job posting will appear to candidates.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="space-y-6 py-4">
+                        {/* Job Header */}
+                        <div className="space-y-2">
+                            <h1 className="text-3xl font-bold">
+                                {form.watch("title") || "Job Title"}
+                            </h1>
+                            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                    <span className="font-medium">Location:</span>
+                                    <span>{form.watch("location") || "Not specified"}</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <span className="font-medium">Type:</span>
+                                    <span>{form.watch("type") || "Full-time"}</span>
+                                </div>
+                                {form.watch("experienceLevel") && (
+                                    <div className="flex items-center gap-1">
+                                        <span className="font-medium">Level:</span>
+                                        <span>{form.watch("experienceLevel")}</span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Job Description */}
+                        <Card>
+                            <CardContent className="pt-6">
+                                <div
+                                    className="prose prose-sm max-w-none dark:prose-invert"
+                                    dangerouslySetInnerHTML={{
+                                        __html:
+                                            form.watch("description") ||
+                                            "<p>No description available</p>",
+                                    }}
+                                />
+                            </CardContent>
+                        </Card>
+
+                        {/* Additional Info */}
+                        {(form.watch("skills") ||
+                            form.watch("responsibilities") ||
+                            form.watch("companyContext")) && (
+                            <Card className="bg-muted/30">
+                                <CardContent className="pt-6 space-y-4">
+                                    {form.watch("skills") && (
+                                        <div>
+                                            <h3 className="font-semibold mb-2">Required Skills</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {form
+                                                    .watch("skills")
+                                                    ?.split(",")
+                                                    .map((skill, i) => (
+                                                        <span
+                                                            key={i}
+                                                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                                                        >
+                                                            {skill.trim()}
+                                                        </span>
+                                                    ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </CardContent>
+                            </Card>
+                        )}
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setPreviewOpen(false)}>
+                            Close
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                setPreviewOpen(false);
+                                // Optionally scroll to top or focus on submit button
+                            }}
+                        >
+                            Looks Good, Continue
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </Form>
-    )
+    );
 }

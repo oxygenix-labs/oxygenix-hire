@@ -1,9 +1,9 @@
-import { JobsTable } from "@/components/jobs/jobs-table"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
-import Link from "next/link"
-import { auth } from "@/lib/auth"
-import { redirect } from "next/navigation"
+import { JobsTable } from "@/components/jobs/jobs-table";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import Link from "next/link";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
 
 async function getJobs() {
     // In a real Server Component, we can fetch directly from DB or call an internal API helper
@@ -15,21 +15,21 @@ async function getJobs() {
     // Let's use direct DB access here for stability, as we are in the same Next.js app.
 
     try {
-        const session = await auth()
-        if (!session?.user?.email) return []
+        const session = await auth();
+        if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default
-        const Job = (await import("@/models/Job")).default
-        const connectToDatabase = (await import("@/lib/db")).default
+        const User = (await import("@/models/User")).default;
+        const Job = (await import("@/models/Job")).default;
+        const connectToDatabase = (await import("@/lib/db")).default;
 
-        await connectToDatabase()
-        const user = await User.findOne({ email: session.user.email })
-        if (!user || !user.organizationId) return []
+        await connectToDatabase();
+        const user = await User.findOne({ email: session.user.email });
+        if (!user || !user.organizationId) return [];
 
         // Fetch all jobs for now, sorting by newest
         const jobs = await Job.find({ organizationId: user.organizationId })
             .sort({ createdAt: -1 })
-            .lean() // Plain JS objects
+            .lean(); // Plain JS objects
 
         // Convert _id and dates to strings for serialization
         return jobs.map((job: any) => ({
@@ -38,23 +38,24 @@ async function getJobs() {
             organizationId: job.organizationId.toString(),
             createdAt: job.createdAt.toISOString(),
             updatedAt: job.updatedAt.toISOString(),
-        }))
-
+        }));
     } catch (error) {
-        console.error("Failed to fetch jobs", error)
-        return []
+        console.error("Failed to fetch jobs", error);
+        return [];
     }
 }
 
 export default async function JobsPage() {
-    const jobs = await getJobs()
+    const jobs = await getJobs();
 
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Jobs</h1>
-                    <p className="text-muted-foreground">Manage your job postings and applications.</p>
+                    <p className="text-muted-foreground">
+                        Manage your job postings and applications.
+                    </p>
                 </div>
                 <Link href="/dashboard/jobs/new">
                     <Button>
@@ -66,5 +67,5 @@ export default async function JobsPage() {
 
             <JobsTable jobs={jobs} />
         </div>
-    )
+    );
 }

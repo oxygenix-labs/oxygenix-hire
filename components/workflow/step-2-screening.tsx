@@ -1,38 +1,34 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import { ArrowLeft, ArrowRight, Wand2 } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, ArrowRight, Wand2 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Step2Props {
-    jobId: string
-    initialData: any
-    onComplete: () => void
+    jobId: string;
+    initialData: any;
+    onComplete: () => void;
 }
 
 export function Step2ResumeScreening({ jobId, initialData, onComplete }: Step2Props) {
-    const router = useRouter()
-    const [criteria, setCriteria] = useState(initialData?.criteria || "")
-    const [isSaving, setIsSaving] = useState(false)
+    const router = useRouter();
+    const [criteria, setCriteria] = useState(initialData?.criteria || "");
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleGenerateCriteria = () => {
         // Mock AI
-        setCriteria("- 3+ years React experience\n- Strong understanding of TypeScript\n- Experience with Next.js App Router\n- Good communication skills")
-        toast({ title: "AI Generated", description: "Screening criteria drafted based on JD." })
-    }
+        setCriteria(
+            "- 3+ years React experience\n- Strong understanding of TypeScript\n- Experience with Next.js App Router\n- Good communication skills"
+        );
+        toast({ title: "AI Generated", description: "Screening criteria drafted based on JD." });
+    };
 
     const handleSave = async () => {
-        setIsSaving(true)
+        setIsSaving(true);
         try {
             await fetch(`/api/jobs/${jobId}/workflow`, {
                 method: "PATCH",
@@ -41,23 +37,25 @@ export function Step2ResumeScreening({ jobId, initialData, onComplete }: Step2Pr
                     stepName: "resumeScreening",
                     status: "completed",
                     data: { criteria },
-                    currentStep: 3
+                    currentStep: 3,
                 }),
-            })
-            onComplete()
-            router.refresh()
+            });
+            onComplete();
+            router.refresh();
         } catch (error) {
-            toast({ title: "Error", variant: "destructive" })
+            toast({ title: "Error", variant: "destructive" });
         } finally {
-            setIsSaving(false)
+            setIsSaving(false);
         }
-    }
+    };
 
     return (
         <div className="space-y-6">
             <div>
                 <h2 className="text-2xl font-bold tracking-tight">Step 2: Resume Screening</h2>
-                <p className="text-muted-foreground">Define what you are looking for to help AI screen candidates.</p>
+                <p className="text-muted-foreground">
+                    Define what you are looking for to help AI screen candidates.
+                </p>
             </div>
 
             <Card>
@@ -69,7 +67,9 @@ export function Step2ResumeScreening({ jobId, initialData, onComplete }: Step2Pr
                             Generate from JD
                         </Button>
                     </div>
-                    <CardDescription>List the key skills and qualifications required.</CardDescription>
+                    <CardDescription>
+                        List the key skills and qualifications required.
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Textarea
@@ -92,5 +92,5 @@ export function Step2ResumeScreening({ jobId, initialData, onComplete }: Step2Pr
                 </Button>
             </div>
         </div>
-    )
+    );
 }

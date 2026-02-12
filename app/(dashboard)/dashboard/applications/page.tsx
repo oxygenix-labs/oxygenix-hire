@@ -1,23 +1,23 @@
-import { KanbanBoard } from "@/components/applications/kanban-board"
-import { auth } from "@/lib/auth"
+import { KanbanBoard } from "@/components/applications/kanban-board";
+import { auth } from "@/lib/auth";
 
 async function getCandidates() {
     try {
-        const session = await auth()
-        if (!session?.user?.email) return []
+        const session = await auth();
+        if (!session?.user?.email) return [];
 
-        const User = (await import("@/models/User")).default
-        const Candidate = (await import("@/models/Candidate")).default
-        const Job = (await import("@/models/Job")).default // Load for Population
-        const connectToDatabase = (await import("@/lib/db")).default
+        const User = (await import("@/models/User")).default;
+        const Candidate = (await import("@/models/Candidate")).default;
+        const Job = (await import("@/models/Job")).default; // Load for Population
+        const connectToDatabase = (await import("@/lib/db")).default;
 
-        await connectToDatabase()
-        const user = await User.findOne({ email: session.user.email })
-        if (!user || !user.organizationId) return []
+        await connectToDatabase();
+        const user = await User.findOne({ email: session.user.email });
+        if (!user || !user.organizationId) return [];
 
         const rawCandidates = await Candidate.find({ organizationId: user.organizationId })
-            .populate('jobId', 'title')
-            .lean()
+            .populate("jobId", "title")
+            .lean();
 
         // Serialize and handle null jobs
         const candidates = rawCandidates.map((candidate: any) => ({
@@ -28,17 +28,17 @@ async function getCandidates() {
             jobId: candidate.jobId ? { title: candidate.jobId.title } : { title: "Deleted Job" }, // Fallback
             stage: candidate.stage,
             updatedAt: candidate.updatedAt.toISOString(),
-        }))
+        }));
 
-        return candidates
+        return candidates;
     } catch (error) {
-        console.error("Failed to fetch candidates", error)
-        return []
+        console.error("Failed to fetch candidates", error);
+        return [];
     }
 }
 
 export default async function ApplicationsPage() {
-    const candidates = await getCandidates()
+    const candidates = await getCandidates();
 
     return (
         <div className="flex flex-col gap-6 h-full">
@@ -51,5 +51,5 @@ export default async function ApplicationsPage() {
 
             <KanbanBoard initialCandidates={candidates} />
         </div>
-    )
+    );
 }

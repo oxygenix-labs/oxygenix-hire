@@ -34,7 +34,9 @@ const ProductPreview = () => {
                                         <div className="h-32 bg-muted rounded border"></div>
                                     </div>
                                     <div className="mt-6 h-64 bg-muted rounded border flex items-center justify-center">
-                                        <span className="text-muted-foreground/50 font-medium text-lg">Product Dashboard Preview</span>
+                                        <span className="text-muted-foreground/50 font-medium text-lg">
+                                            Product Dashboard Preview
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +45,7 @@ const ProductPreview = () => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default ProductPreview
+export default ProductPreview;

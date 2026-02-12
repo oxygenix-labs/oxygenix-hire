@@ -2,24 +2,27 @@ const steps = [
     {
         number: "01",
         title: "Create Job",
-        description: "Draft your job description with AI assistance and post it to multiple boards in one click.",
+        description:
+            "Draft your job description with AI assistance and post it to multiple boards in one click.",
     },
     {
         number: "02",
         title: "Get Applications",
-        description: "Receive candidates in a unified inbox. Let AI screen resumes for relevant skills.",
+        description:
+            "Receive candidates in a unified inbox. Let AI screen resumes for relevant skills.",
     },
     {
         number: "03",
         title: "Run Hiring Pipeline",
-        description: "Move candidates through stages, schedule interviews, and collect team feedback.",
+        description:
+            "Move candidates through stages, schedule interviews, and collect team feedback.",
     },
     {
         number: "04",
         title: "Send Offer",
         description: "Generate compliant offer letters and collect e-signatures seamlessly.",
     },
-]
+];
 
 const SolutionSection = () => {
     return (
@@ -51,7 +54,7 @@ const SolutionSection = () => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default SolutionSection
+export default SolutionSection;

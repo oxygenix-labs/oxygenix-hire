@@ -1,30 +1,32 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Editor } from "@/components/ui/editor"
-import { ArrowLeft, CheckCircle, Wand2 } from "lucide-react"
-import { toast } from "@/components/ui/use-toast"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Editor } from "@/components/ui/editor";
+import { ArrowLeft, CheckCircle, Wand2 } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface Step5Props {
-    jobId: string
-    initialData: any
-    onComplete: () => void
+    jobId: string;
+    initialData: any;
+    onComplete: () => void;
 }
 
 export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
-    const router = useRouter()
-    const [template, setTemplate] = useState(initialData?.template || "")
-    const [isSaving, setIsSaving] = useState(false)
+    const router = useRouter();
+    const [template, setTemplate] = useState(initialData?.template || "");
+    const [isSaving, setIsSaving] = useState(false);
 
     const handleGenerate = () => {
-        setTemplate(`<p>Dear [Candidate Name],</p><p>We are delighted to offer you the position of [Job Title] at [Company Name].</p><p><strong>Salary:</strong> [Amount]</p><p><strong>Start Date:</strong> [Date]</p>`)
-        toast({ title: "AI Generated", description: "Offer template created." })
-    }
+        setTemplate(
+            `<p>Dear [Candidate Name],</p><p>We are delighted to offer you the position of [Job Title] at [Company Name].</p><p><strong>Salary:</strong> [Amount]</p><p><strong>Start Date:</strong> [Date]</p>`
+        );
+        toast({ title: "AI Generated", description: "Offer template created." });
+    };
 
     const handleSave = async () => {
-        setIsSaving(true)
+        setIsSaving(true);
         try {
             await fetch(`/api/jobs/${jobId}/workflow`, {
                 method: "PATCH",
@@ -35,22 +37,24 @@ export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
                     data: { template },
                     // No next step, stay on 5 or redirect to job dashboard
                 }),
-            })
-            onComplete()
-            toast({ title: "Workflow Completed", description: "All steps setup successfully." })
-            router.push(`/dashboard/jobs`)
+            });
+            onComplete();
+            toast({ title: "Workflow Completed", description: "All steps setup successfully." });
+            router.push(`/dashboard/jobs`);
         } catch (error) {
-            toast({ title: "Error", variant: "destructive" })
+            toast({ title: "Error", variant: "destructive" });
         } finally {
-            setIsSaving(false)
+            setIsSaving(false);
         }
-    }
+    };
 
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-2xl font-bold tracking-tight">Step 5: Offer & Communication</h2>
+                    <h2 className="text-2xl font-bold tracking-tight">
+                        Step 5: Offer & Communication
+                    </h2>
                     <p className="text-muted-foreground">Setup the offer package template.</p>
                 </div>
                 <Button variant="outline" onClick={handleGenerate}>
@@ -68,11 +72,15 @@ export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Previous
                 </Button>
-                <Button onClick={handleSave} disabled={isSaving} className="bg-green-600 hover:bg-green-700">
+                <Button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="bg-green-600 hover:bg-green-700"
+                >
                     {isSaving ? "Finishing..." : "Finish Setup"}
                     <CheckCircle className="ml-2 h-4 w-4" />
                 </Button>
             </div>
         </div>
-    )
+    );
 }

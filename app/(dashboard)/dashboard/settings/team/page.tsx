@@ -1,5 +1,5 @@
-import { Separator } from "@/components/ui/separator"
-import { TeamList } from "@/components/settings/team-list"
+import { Separator } from "@/components/ui/separator";
+import { TeamList } from "@/components/settings/team-list";
 
 export default function SettingsTeamPage() {
     return (
@@ -13,5 +13,5 @@ export default function SettingsTeamPage() {
             <Separator />
             <TeamList />
         </div>
-    )
+    );
 }

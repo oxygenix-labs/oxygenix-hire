@@ -1,13 +1,13 @@
-import { Metadata } from "next"
-import Image from "next/image"
+import { Metadata } from "next";
+import Image from "next/image";
 
-import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "@/components/settings/sidebar-nav"
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/settings/sidebar-nav";
 
 export const metadata: Metadata = {
     title: "Settings",
     description: "Manage your account and organization settings.",
-}
+};
 
 const sidebarNavItems = [
     {
@@ -34,10 +34,10 @@ const sidebarNavItems = [
         title: "Security",
         href: "/dashboard/settings/security",
     },
-]
+];
 
 interface SettingsLayoutProps {
-    children: React.ReactNode
+    children: React.ReactNode;
 }
 
 export default function SettingsLayout({ children }: SettingsLayoutProps) {
@@ -57,5 +57,5 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
                 <div className="flex-1 lg:max-w-2xl">{children}</div>
             </div>
         </div>
-    )
+    );
 }

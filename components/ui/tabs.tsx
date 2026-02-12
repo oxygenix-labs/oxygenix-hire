@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as TabsPrimitives from "@radix-ui/react-tabs"
+import * as React from "react";
+import * as TabsPrimitives from "@radix-ui/react-tabs";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-const Tabs = TabsPrimitives.Root
+const Tabs = TabsPrimitives.Root;
 
 const TabsList = React.forwardRef<
     React.ElementRef<typeof TabsPrimitives.List>,
@@ -19,8 +19,8 @@ const TabsList = React.forwardRef<
         )}
         {...props}
     />
-))
-TabsList.displayName = TabsPrimitives.List.displayName
+));
+TabsList.displayName = TabsPrimitives.List.displayName;
 
 const TabsTrigger = React.forwardRef<
     React.ElementRef<typeof TabsPrimitives.Trigger>,
@@ -34,8 +34,8 @@ const TabsTrigger = React.forwardRef<
         )}
         {...props}
     />
-))
-TabsTrigger.displayName = TabsPrimitives.Trigger.displayName
+));
+TabsTrigger.displayName = TabsPrimitives.Trigger.displayName;
 
 const TabsContent = React.forwardRef<
     React.ElementRef<typeof TabsPrimitives.Content>,
@@ -49,7 +49,7 @@ const TabsContent = React.forwardRef<
         )}
         {...props}
     />
-))
-TabsContent.displayName = TabsPrimitives.Content.displayName
+));
+TabsContent.displayName = TabsPrimitives.Content.displayName;
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };

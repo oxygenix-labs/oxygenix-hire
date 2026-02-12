@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
-import Link from "next/link"
+import { Button } from "@/components/ui/button";
+import { Check } from "lucide-react";
+import Link from "next/link";
 
 const tiers = [
     {
@@ -41,7 +41,7 @@ const tiers = [
         cta: "Contact Sales",
         popular: false,
     },
-]
+];
 
 const PricingSection = () => {
     return (
@@ -60,8 +60,11 @@ const PricingSection = () => {
                     {tiers.map((tier) => (
                         <div
                             key={tier.name}
-                            className={`relative flex flex-col rounded-2xl border p-8 shadow-sm transition-all ${tier.popular ? "border-primary shadow-lg scale-105 z-10 bg-background" : "bg-card"
-                                }`}
+                            className={`relative flex flex-col rounded-2xl border p-8 shadow-sm transition-all ${
+                                tier.popular
+                                    ? "border-primary shadow-lg scale-105 z-10 bg-background"
+                                    : "bg-card"
+                            }`}
                         >
                             {tier.popular && (
                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground shadow-sm">
@@ -70,7 +73,9 @@ const PricingSection = () => {
                             )}
                             <div className="mb-6">
                                 <h3 className="text-xl font-bold">{tier.name}</h3>
-                                <p className="mt-2 text-muted-foreground text-sm">{tier.description}</p>
+                                <p className="mt-2 text-muted-foreground text-sm">
+                                    {tier.description}
+                                </p>
                             </div>
                             <div className="mb-6">
                                 <span className="text-4xl font-bold">{tier.price}</span>
@@ -97,7 +102,7 @@ const PricingSection = () => {
                 </div>
             </div>
         </section>
-    )
-}
+    );
+};
 
-export default PricingSection
+export default PricingSection;

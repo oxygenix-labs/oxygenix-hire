@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function RecentActivity() {
     return (
@@ -36,12 +36,10 @@ export function RecentActivity() {
                 </Avatar>
                 <div className="ml-4 space-y-1">
                     <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-                    <p className="text-sm text-muted-foreground">
-                        New job posted: "UX Designer"
-                    </p>
+                    <p className="text-sm text-muted-foreground">New job posted: "UX Designer"</p>
                 </div>
                 <div className="ml-auto font-medium text-sm text-muted-foreground">5h ago</div>
             </div>
         </div>
-    )
+    );
 }
