@@ -97,7 +97,7 @@ export function OrgForm({ organization }: OrgFormProps) {
                                 <Input placeholder="Acme Inc." {...field} />
                             </FormControl>
                             <FormDescription>
-                                This is your organization's display name.
+                                This is your organization&apos;s display name.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

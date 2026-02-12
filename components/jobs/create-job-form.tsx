@@ -373,7 +373,6 @@ export function CreateJobForm() {
                                 )}
                             </div>
                             <FormControl>
-                                {/* @ts-ignore */}
                                 <Editor value={field.value} onChange={field.onChange} />
                             </FormControl>
                             <FormMessage />

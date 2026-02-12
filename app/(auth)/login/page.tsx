@@ -30,8 +30,8 @@ export default function LoginPage() {
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-2">
                         <p className="text-lg">
-                            &ldquo;We reduced our time-to-hire by 50% using Oxygenix. It's the only
-                            tool we need.&rdquo;
+                            &ldquo;We reduced our time-to-hire by 50% using Oxygenix. It&apos;s the
+                            only tool we need.&rdquo;
                         </p>
                         <footer className="text-sm">Alex Chen, VP of Engineering</footer>
                     </blockquote>

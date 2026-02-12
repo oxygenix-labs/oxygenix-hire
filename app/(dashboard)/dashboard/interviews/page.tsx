@@ -73,7 +73,8 @@ export default async function InterviewsPage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {interviews.length === 0 ? (
                     <div className="col-span-full text-center py-12 text-muted-foreground border-2 border-dashed rounded-lg">
-                        No interviews planned yet. Click "Plan New Interview" to get started.
+                        No interviews planned yet. Click &quot;Plan New Interview&quot; to get
+                        started.
                     </div>
                 ) : (
                     interviews.map((interview) => (

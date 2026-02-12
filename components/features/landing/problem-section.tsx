@@ -36,7 +36,8 @@ const ProblemSection = () => {
                         Hiring is broken.
                     </h2>
                     <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Traditional methods aren't scalable. They are slow, expensive, and biased.
+                        Traditional methods aren&apos;t scalable. They are slow, expensive, and
+                        biased.
                     </p>
                 </div>
 

@@ -52,10 +52,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
                 session.user.id = token.sub;
             }
             if (token.role && session.user) {
-                session.user.role = token.role;
+                session.user.role = token.role as string;
             }
             if (token.organizationId && session.user) {
-                session.user.organizationId = token.organizationId;
+                session.user.organizationId = token.organizationId as string;
             }
             return session;
         },

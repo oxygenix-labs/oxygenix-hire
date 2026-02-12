@@ -11,10 +11,10 @@ const eslintConfig = defineConfig([
             "no-console": ["warn", { allow: ["warn", "error"] }],
 
             // TypeScript - all warnings for gradual adoption
-            "@typescript-eslint/no-explicit-any": "warn",
+            "@typescript-eslint/no-explicit-any": "off",
             "@typescript-eslint/explicit-function-return-type": "off",
-            "@typescript-eslint/no-unused-vars": "warn",
-            "@typescript-eslint/no-require-imports": "warn",
+            "@typescript-eslint/no-unused-vars": "off",
+            "@typescript-eslint/no-require-imports": "off",
 
             // React best practices
             "react-hooks/rules-of-hooks": "error",

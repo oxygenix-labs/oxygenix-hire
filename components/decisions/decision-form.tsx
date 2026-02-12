@@ -91,7 +91,7 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                 </CardTitle>
                 <CardDescription>
                     Review interview feedback and lock your final decision. This action will update
-                    the candidate's status permanently.
+                    the candidate&apos;s status permanently.
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -170,7 +170,7 @@ export function DecisionForm({ candidateId, candidateName }: DecisionFormProps) 
                         <AlertDialogHeader>
                             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                             <AlertDialogDescription>
-                                This will change the candidate's status to{" "}
+                                This will change the candidate&apos;s status to{" "}
                                 <strong>{outcome?.toUpperCase()}</strong> and send a notification
                                 email (mock). This action cannot be undone.
                             </AlertDialogDescription>
