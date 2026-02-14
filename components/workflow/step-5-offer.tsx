@@ -241,11 +241,8 @@ export function Step5Offer({ jobId, initialData, onComplete, onBack }: Step5Prop
                                         <SelectItem value="flexible-offer">
                                             Flexible Offer
                                         </SelectItem>
-                                        <SelectItem value="negotiation-more">
-                                            Negotiation: They Ask More
-                                        </SelectItem>
                                         <SelectItem value="negotiation-firm">
-                                            Negotiation: We Can't
+                                            Negotiation: We Can&apos;t
                                         </SelectItem>
                                         <SelectItem value="rejection-standard">
                                             Rejection: Standard
