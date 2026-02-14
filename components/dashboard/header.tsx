@@ -11,8 +11,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 export function Header() {
     const pathname = usePathname();
     const isWorkflowPage = pathname.includes("/workflow");
+    const isCreateJobPage = pathname === "/dashboard/jobs/new";
 
-    if (isWorkflowPage) return null;
+    if (isWorkflowPage || isCreateJobPage) return null;
 
     return (
         <header
