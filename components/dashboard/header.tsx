@@ -12,8 +12,9 @@ export function Header() {
     const pathname = usePathname();
     const isWorkflowPage = pathname.includes("/workflow");
     const isCreateJobPage = pathname === "/dashboard/jobs/new";
+    const isDashboardPage = pathname === "/dashboard";
 
-    if (isWorkflowPage || isCreateJobPage) return null;
+    if (isWorkflowPage || isCreateJobPage || isDashboardPage) return null;
 
     return (
         <header

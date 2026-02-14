@@ -30,24 +30,28 @@ export default async function DashboardPage() {
                     value={metrics.activeJobs}
                     description="+2 from last month"
                     icon={Briefcase}
+                    href="/dashboard/jobs"
                 />
                 <MetricsCard
                     title="Total Candidates"
                     value={metrics.totalCandidates}
                     description="+18% from last month"
                     icon={Users}
+                    href="/dashboard/candidates"
                 />
                 <MetricsCard
                     title="Interviews"
                     value={metrics.interviewsScheduled}
                     description="Scheduled for this week"
                     icon={Calendar}
+                    href="/dashboard/candidates"
                 />
                 <MetricsCard
                     title="Offers Sent"
                     value={metrics.offersSent}
                     description="3 pending acceptance"
                     icon={FileCheck}
+                    href="/dashboard/candidates"
                 />
             </div>
 
@@ -86,27 +90,19 @@ export default async function DashboardPage() {
                             </div>
                         </Link>
 
-                        <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium leading-none">Add Candidate</p>
-                                <p className="text-sm text-muted-foreground">
-                                    Manually add a candidate profile.
-                                </p>
+                        <Link href="/dashboard/candidates">
+                            <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
+                                <div className="flex-1 space-y-1">
+                                    <p className="text-sm font-medium leading-none">
+                                        Add Candidate
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                        Manually add a candidate profile.
+                                    </p>
+                                </div>
+                                <Users className="h-4 w-4 text-muted-foreground" />
                             </div>
-                            <Users className="h-4 w-4 text-muted-foreground" />
-                        </div>
-
-                        <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                            <div className="flex-1 space-y-1">
-                                <p className="text-sm font-medium leading-none">
-                                    Schedule Interview
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                    Sync with calendar and invite team.
-                                </p>
-                            </div>
-                            <Calendar className="h-4 w-4 text-muted-foreground" />
-                        </div>
+                        </Link>
                     </CardContent>
                 </Card>
             </div>
