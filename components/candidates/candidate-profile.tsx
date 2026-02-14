@@ -10,17 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import {
-    Mail,
-    Briefcase,
-    Clock,
-    FileText,
-    CheckCircle2,
-    MessageSquare,
-    BrainCircuit,
-    History,
-} from "lucide-react";
-import { useState } from "react";
+import { Mail, Briefcase, Clock, FileText, CheckCircle2, BrainCircuit } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";

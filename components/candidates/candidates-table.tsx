@@ -49,26 +49,26 @@ interface CandidatesTableProps {
     candidates: Candidate[];
 }
 
-const formatStage = (stage: string) => {
-    switch (stage) {
-        case "Applied":
-            return "default";
-        case "Screening":
-            return "secondary";
-        case "Interview":
-            return "warning"; // Assuming warning variant exists, or fallback
-        case "Decision":
-            return "secondary";
-        case "Offer":
-            return "default"; // or success color if available
-        case "Hired":
-            return "success"; // Will use a custom class if variant doesn't exist
-        case "Rejected":
-            return "destructive";
-        default:
-            return "outline";
-    }
-};
+// const formatStage = (stage: string) => {
+//     switch (stage) {
+//         case "Applied":
+//             return "default";
+//         case "Screening":
+//             return "secondary";
+//         case "Interview":
+//             return "warning"; // Assuming warning variant exists, or fallback
+//         case "Decision":
+//             return "secondary";
+//         case "Offer":
+//             return "default"; // or success color if available
+//         case "Hired":
+//             return "success"; // Will use a custom class if variant doesn't exist
+//         case "Rejected":
+//             return "destructive";
+//         default:
+//             return "outline";
+//     }
+// };
 
 export function CandidatesTable({ candidates }: CandidatesTableProps) {
     const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
