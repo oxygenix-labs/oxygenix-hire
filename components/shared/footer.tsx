@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/shared/logo";
 
 const Footer = () => {
     return (
@@ -6,14 +7,8 @@ const Footer = () => {
             <div className="container px-4 md:px-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                     <div className="col-span-2 md:col-span-1">
-                        <Link
-                            href="/"
-                            className="font-heading font-bold text-xl tracking-tight text-primary flex items-center gap-2 mb-4"
-                        >
-                            <div className="w-6 h-6 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold text-sm">
-                                O
-                            </div>
-                            Oxygenix Hire
+                        <Link href="/" className="flex items-center gap-2 mb-4">
+                            <Logo />
                         </Link>
                         <p className="text-sm text-muted-foreground">
                             All-in-one hiring platform for modern teams. Built for speed and

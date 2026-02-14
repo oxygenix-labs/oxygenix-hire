@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Briefcase, Users, Settings } from "lucide-react";
+import { Logo } from "@/components/shared/logo";
 
 const sidebarLinks = [
     { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -32,11 +33,8 @@ export function Sidebar() {
         <div className="hidden border-r bg-muted/40 md:block w-64 flex-shrink-0 h-screen sticky top-0">
             <div className="flex h-full max-h-screen flex-col gap-2">
                 <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
-                    <Link href="/" className="flex items-center gap-2 font-semibold">
-                        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center font-bold text-primary-foreground">
-                            O
-                        </div>
-                        <span className="">Oxygenix Hire</span>
+                    <Link href="/" className="flex items-center">
+                        <Logo />
                     </Link>
                 </div>
                 <div className="flex-1 overflow-auto py-2">

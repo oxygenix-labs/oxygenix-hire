@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Logo } from "@/components/shared/logo";
 
 export function Header() {
     const pathname = usePathname();
@@ -32,8 +33,7 @@ export function Header() {
                 <SheetContent side="left" className="flex flex-col">
                     <nav className="grid gap-2 text-lg font-medium">
                         <Link href="#" className="flex items-center gap-2 text-lg font-semibold">
-                            <Package2 className="h-6 w-6" />
-                            <span className="sr-only">Oxygenix Hire</span>
+                            <Logo />
                         </Link>
                         <Link
                             href="/dashboard"

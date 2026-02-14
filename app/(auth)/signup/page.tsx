@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SignupForm } from "@/components/auth/signup-form";
+import { Logo } from "@/components/shared/logo";
 
 export default function SignupPage() {
     return (
@@ -10,11 +11,8 @@ export default function SignupPage() {
                     <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)] bg-[size:24px_24px] opacity-30"></div>
                 </div>
                 <div className="relative z-20 flex items-center text-lg font-medium">
-                    <Link href="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center font-bold text-white">
-                            O
-                        </div>
-                        Oxygenix Hire
+                    <Link href="/">
+                        <Logo variant="light" />
                     </Link>
                 </div>
 
