@@ -11,9 +11,10 @@ interface Step5Props {
     jobId: string;
     initialData: any;
     onComplete: () => void;
+    onBack?: () => void;
 }
 
-export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
+export function Step5Offer({ jobId, initialData, onComplete, onBack }: Step5Props) {
     const router = useRouter();
     const [template, setTemplate] = useState(initialData?.template || "");
     const [isSaving, setIsSaving] = useState(false);
@@ -49,7 +50,7 @@ export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-24 relative">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-2xl font-bold tracking-tight">
@@ -67,19 +68,21 @@ export function Step5Offer({ jobId, initialData, onComplete }: Step5Props) {
                 <Editor value={template} onChange={setTemplate} />
             </div>
 
-            <div className="flex justify-between pt-4">
-                <Button variant="outline" disabled>
+            <div className="fixed bottom-0 left-0 md:left-64 right-0 p-4 bg-background border-t flex justify-between gap-2 z-50">
+                <Button variant="outline" onClick={onBack} disabled={!onBack}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Previous
                 </Button>
-                <Button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="bg-green-600 hover:bg-green-700"
-                >
-                    {isSaving ? "Finishing..." : "Finish Setup"}
-                    <CheckCircle className="ml-2 h-4 w-4" />
-                </Button>
+                <div className="mr-8">
+                    <Button
+                        onClick={handleSave}
+                        disabled={isSaving}
+                        className="bg-green-600 hover:bg-green-700"
+                    >
+                        {isSaving ? "Finishing..." : "Finish Setup"}
+                        <CheckCircle className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
             </div>
         </div>
     );

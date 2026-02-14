@@ -11,6 +11,13 @@ const createJobSchema = z.object({
     location: z.string(),
     status: z.string(),
     description: z.string(),
+    // Workflow Data
+    experienceLevel: z.string().optional(),
+    skills: z.array(z.string()).optional(),
+    responsibilities: z.string().optional(),
+    companyContext: z.string().optional(),
+    llmProvider: z.string().optional(),
+    selectedPrompt: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -22,7 +29,19 @@ export async function POST(req: Request) {
         }
 
         const body = await req.json();
-        const { title, type, location, status, description } = createJobSchema.parse(body);
+        const {
+            title,
+            type,
+            location,
+            status,
+            description,
+            experienceLevel,
+            skills,
+            responsibilities,
+            companyContext,
+            llmProvider,
+            selectedPrompt,
+        } = createJobSchema.parse(body);
 
         await connectToDatabase();
 
@@ -42,6 +61,24 @@ export async function POST(req: Request) {
             status,
             description,
             organizationId: user.organizationId,
+            workflow: {
+                currentStep: 2, // Start at step 2 since step 1 is done via form
+                steps: {
+                    jobDescription: {
+                        status: "completed",
+                        data: {
+                            description,
+                            experienceLevel,
+                            skills,
+                            responsibilities,
+                            companyContext,
+                            llmProvider,
+                            location,
+                            selectedPrompt,
+                        },
+                    },
+                },
+            },
         });
 
         return NextResponse.json(job);

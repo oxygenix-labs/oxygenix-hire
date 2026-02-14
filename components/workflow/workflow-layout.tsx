@@ -6,6 +6,7 @@ interface WorkflowLayoutProps {
     currentStep: number; // 1-5
     jobId: string;
     children: React.ReactNode;
+    onStepClick?: (stepNumber: number) => void;
 }
 
 const steps = [
@@ -16,9 +17,9 @@ const steps = [
     { number: 5, title: "Offer & Close", id: "offer" },
 ];
 
-export function WorkflowLayout({ currentStep, children }: WorkflowLayoutProps) {
+export function WorkflowLayout({ currentStep, children, onStepClick }: WorkflowLayoutProps) {
     return (
-        <div className="flex flex-col space-y-8 p-8">
+        <div className="flex flex-col space-y-6 p-4 md:p-6">
             {/* Stepper Header */}
             <div className="relative">
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-muted -z-10 -translate-y-1/2" />
@@ -27,6 +28,7 @@ export function WorkflowLayout({ currentStep, children }: WorkflowLayoutProps) {
                         const isCompleted = step.number < currentStep;
                         const isCurrent = step.number === currentStep;
                         const isLocked = step.number > currentStep;
+                        const isClickable = isCompleted || isCurrent;
 
                         return (
                             <div
@@ -34,13 +36,15 @@ export function WorkflowLayout({ currentStep, children }: WorkflowLayoutProps) {
                                 className="flex flex-col items-center gap-2 bg-background px-2"
                             >
                                 <div
+                                    onClick={() => isClickable && onStepClick?.(step.number)}
                                     className={cn(
                                         "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-all",
                                         isCompleted &&
-                                            "border-primary bg-primary text-primary-foreground",
-                                        isCurrent && "border-primary ring-4 ring-primary/20",
+                                            "border-primary bg-primary text-primary-foreground cursor-pointer hover:scale-110 hover:shadow-lg",
+                                        isCurrent &&
+                                            "border-primary ring-4 ring-primary/20 cursor-pointer",
                                         isLocked &&
-                                            "border-muted-foreground/30 text-muted-foreground"
+                                            "border-muted-foreground/30 text-muted-foreground cursor-not-allowed"
                                     )}
                                 >
                                     {isCompleted ? (

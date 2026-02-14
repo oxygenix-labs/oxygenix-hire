@@ -50,6 +50,8 @@ const JobSchema = new Schema(
                         responsibilities: { type: String },
                         companyContext: { type: String },
                         selectedPrompt: { type: String },
+                        llmProvider: { type: String },
+                        location: { type: String },
                     },
                 },
                 resumeScreening: {

@@ -20,8 +20,30 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
         router.refresh();
     };
 
+    const handleStepNavigation = async (stepNumber: number) => {
+        try {
+            const res = await fetch(`/api/jobs/${job._id}/workflow`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    currentStep: stepNumber,
+                }),
+            });
+
+            if (!res.ok) throw new Error("Failed to navigate");
+
+            router.refresh();
+        } catch (error) {
+            console.error("Navigation error:", error);
+        }
+    };
+
     return (
-        <WorkflowLayout currentStep={currentStep} jobId={job._id}>
+        <WorkflowLayout
+            currentStep={currentStep}
+            jobId={job._id}
+            onStepClick={handleStepNavigation}
+        >
             {currentStep === 1 && (
                 <Step1JobDescription
                     jobId={job._id}
@@ -33,7 +55,11 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
                 <Step2ResumeScreening
                     jobId={job._id}
                     initialData={job.workflow.steps.resumeScreening.data}
+                    jdData={job.workflow.steps.jobDescription.data}
                     onComplete={handleComplete}
+                    onBack={() => {
+                        handleStepNavigation(1);
+                    }}
                 />
             )}
             {currentStep === 3 && (
@@ -41,6 +67,7 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
                     jobId={job._id}
                     initialData={job.workflow.steps.interviewPlanning.data}
                     onComplete={handleComplete}
+                    onBack={() => handleStepNavigation(2)}
                 />
             )}
             {currentStep === 4 && (
@@ -48,6 +75,7 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
                     jobId={job._id}
                     initialData={job.workflow.steps.hiringDecision.data}
                     onComplete={handleComplete}
+                    onBack={() => handleStepNavigation(3)}
                 />
             )}
             {currentStep === 5 && (
@@ -55,6 +83,7 @@ export function WorkflowClient({ job }: WorkflowClientProps) {
                     jobId={job._id}
                     initialData={job.workflow.steps.offer.data}
                     onComplete={handleComplete}
+                    onBack={() => handleStepNavigation(4)}
                 />
             )}
         </WorkflowLayout>

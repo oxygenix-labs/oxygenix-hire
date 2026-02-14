@@ -159,12 +159,24 @@ export function CreateJobForm() {
         setIsLoading(true);
 
         try {
+            const payload = {
+                ...data,
+                skills: data.skills
+                    ? data.skills
+                          .split(",")
+                          .map((s) => s.trim())
+                          .filter(Boolean)
+                    : [],
+                llmProvider: selectedProvider,
+                selectedPrompt: selectedPrompt,
+            };
+
             const response = await fetch("/api/jobs", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(payload),
             });
 
             if (!response.ok) {
@@ -175,7 +187,8 @@ export function CreateJobForm() {
 
             toast({ title: "Success", description: "Job post created successfully." });
             router.refresh();
-            router.push(`/dashboard/jobs/${job._id}/workflow`); // Redirect to workflow immediately? User flow choice.
+            // Redirect to workflow. Since currentStep is set to 2 in API, this will show Step 2.
+            router.push(`/dashboard/jobs/${job._id}/workflow`);
         } catch (error) {
             console.error(error);
             toast({

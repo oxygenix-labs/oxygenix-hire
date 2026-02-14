@@ -13,6 +13,19 @@ const sidebarLinks = [
     { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { CircleUser, LogOut } from "lucide-react";
+import { signOutAction } from "@/app/actions/auth";
+
+// ... existing code ...
+
 export function Sidebar() {
     const pathname = usePathname();
 
@@ -55,17 +68,31 @@ export function Sidebar() {
                         })}
                     </nav>
                 </div>
-                <div className="mt-auto p-4">
-                    {/* Placeholder for user profile/logout in bottom sidebar */}
-                    <div className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground">
-                        <div className="w-8 h-8 rounded-full bg-muted border flex items-center justify-center">
-                            U
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-foreground">User Name</span>
-                            <span className="text-xs">Start-up Plan</span>
-                        </div>
-                    </div>
+                <div className="mt-auto p-3 border-t">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <div className="flex items-center gap-3 px-3 py-2 text-sm font-medium text-muted-foreground cursor-pointer hover:bg-muted rounded-lg transition-colors">
+                                <div className="w-8 h-8 rounded-full bg-muted border flex items-center justify-center">
+                                    <CircleUser className="h-5 w-5" />
+                                </div>
+                                <div className="flex flex-col flex-1">
+                                    <span className="text-foreground">My Account</span>
+                                    <span className="text-xs">Manage</span>
+                                </div>
+                            </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56" forceMount>
+                            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem>Settings</DropdownMenuItem>
+                            <DropdownMenuItem>Support</DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem onClick={() => signOutAction()}>
+                                <LogOut className="mr-2 h-4 w-4" />
+                                <span>Log out</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
         </div>

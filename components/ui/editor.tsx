@@ -4,7 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { Button } from "@/components/ui/button";
-import { Bold, Italic, List, ListOrdered, Wand2 } from "lucide-react";
+import { Bold, Italic, List, ListOrdered } from "lucide-react";
 
 interface EditorProps {
     value: string;
@@ -37,39 +37,6 @@ export function Editor({ value, onChange, placeholder }: EditorProps) {
     if (!editor) {
         return null;
     }
-
-    const generateAIContent = () => {
-        // Simulation of AI generation
-        const templates = [
-            `
-      <h3>Job Summary</h3>
-      <p>We are looking for a talented individual to join our growing team...</p>
-      <h3>Responsibilities</h3>
-      <ul>
-        <li>Collaborate with cross-functional teams</li>
-        <li>Write clean, maintainable code</li>
-        <li>Participate in code reviews</li>
-      </ul>
-      <h3>Requirements</h3>
-      <ul>
-        <li>3+ years of experience</li>
-        <li>Strong problem-solving skills</li>
-      </ul>
-      `,
-            `
-      <h3>About the Role</h3>
-      <p>As a key member of our team, you will drive innovation...</p>
-      <h3>What You'll Do</h3>
-      <ul>
-        <li>Lead project initiatives</li>
-        <li>Mentor junior developers</li>
-      </ul>
-      `,
-        ];
-        const randomTemplate = templates[Math.floor(Math.random() * templates.length)]!;
-        editor.commands.setContent(randomTemplate);
-        onChange(randomTemplate);
-    };
 
     return (
         <div className="flex flex-col gap-2">
@@ -109,17 +76,6 @@ export function Editor({ value, onChange, placeholder }: EditorProps) {
                     type="button"
                 >
                     <ListOrdered className="h-4 w-4" />
-                </Button>
-                <div className="flex-1" />
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={generateAIContent}
-                    className="text-violet-600 border-violet-200 hover:bg-violet-50 hover:text-violet-700 gap-2"
-                    type="button"
-                >
-                    <Wand2 className="h-3 w-3" />
-                    AI Generate
                 </Button>
             </div>
             <EditorContent editor={editor} />

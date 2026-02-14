@@ -33,14 +33,10 @@ export async function GET(_req: Request, { params }: { params: Promise<{ jobId: 
 }
 
 const updateWorkflowSchema = z.object({
-    stepName: z.enum([
-        "jobDescription",
-        "resumeScreening",
-        "interviewPlanning",
-        "hiringDecision",
-        "offer",
-    ]),
-    status: z.enum(["not_started", "in_progress", "completed"]),
+    stepName: z
+        .enum(["jobDescription", "resumeScreening", "interviewPlanning", "hiringDecision", "offer"])
+        .optional(),
+    status: z.enum(["not_started", "in_progress", "completed"]).optional(),
     data: z.any().optional(),
     currentStep: z.number().min(1).max(5).optional(),
 });

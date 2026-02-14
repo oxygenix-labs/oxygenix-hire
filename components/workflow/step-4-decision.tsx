@@ -11,9 +11,10 @@ interface Step4Props {
     jobId: string;
     initialData: any;
     onComplete: () => void;
+    onBack?: () => void;
 }
 
-export function Step4HiringDecision({ jobId, initialData, onComplete }: Step4Props) {
+export function Step4HiringDecision({ jobId, initialData, onComplete, onBack }: Step4Props) {
     const router = useRouter();
     const [scorecard, setScorecard] = useState(
         initialData?.scorecard ||
@@ -44,7 +45,7 @@ export function Step4HiringDecision({ jobId, initialData, onComplete }: Step4Pro
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-24 relative">
             <div>
                 <h2 className="text-2xl font-bold tracking-tight">Step 4: Hiring Decision</h2>
                 <p className="text-muted-foreground">
@@ -61,15 +62,17 @@ export function Step4HiringDecision({ jobId, initialData, onComplete }: Step4Pro
                 />
             </div>
 
-            <div className="flex justify-between pt-4">
-                <Button variant="outline" disabled>
+            <div className="fixed bottom-0 left-0 md:left-64 right-0 p-4 bg-background border-t flex justify-between gap-2 z-50">
+                <Button variant="outline" onClick={onBack} disabled={!onBack}>
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Previous
                 </Button>
-                <Button onClick={handleSave} disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Next Step"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <div className="mr-8">
+                    <Button onClick={handleSave} disabled={isSaving}>
+                        {isSaving ? "Saving..." : "Next Step"}
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                </div>
             </div>
         </div>
     );
