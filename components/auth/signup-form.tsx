@@ -84,7 +84,7 @@ export function SignupForm() {
                         <Label htmlFor="name">Full Name</Label>
                         <Input
                             id="name"
-                            placeholder="John Doe"
+                            placeholder="e.g. Alex Smith"
                             type="text"
                             autoCapitalize="none"
                             autoCorrect="off"
@@ -131,7 +131,7 @@ export function SignupForm() {
                         <Label htmlFor="companyName">Company Name</Label>
                         <Input
                             id="companyName"
-                            placeholder="Acme Inc."
+                            placeholder="e.g. Acme Corp"
                             type="text"
                             autoCapitalize="none"
                             autoCorrect="off"
@@ -154,7 +154,7 @@ export function SignupForm() {
                         <Label htmlFor="password">Password</Label>
                         <Input
                             id="password"
-                            placeholder="Create a password"
+                            placeholder="Min. 8 characters"
                             type="password"
                             autoCapitalize="none"
                             autoCorrect="off"
@@ -257,7 +257,7 @@ export function SignupForm() {
 
                     <Button disabled={isLoading} className="w-full mt-4">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        Create account & start free trial
+                        Start 14-Day Free Trial
                     </Button>
                 </div>
             </form>

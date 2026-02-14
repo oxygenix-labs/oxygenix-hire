@@ -18,10 +18,9 @@ export default function LoginPage() {
                 </div>
 
                 <div className="relative z-20 mt-20">
-                    <h2 className="text-3xl font-bold mb-6">Welcome back.</h2>
+                    <h2 className="text-3xl font-bold mb-6">Welcome back to Oxygenix.</h2>
                     <p className="text-lg/relaxed opacity-90 mb-8 max-w-sm">
-                        Log in to manage your hiring pipeline, review candidates, and schedule
-                        interviews.
+                        Securely access your hiring pipeline and manage your team.
                     </p>
                 </div>
 
@@ -39,10 +38,10 @@ export default function LoginPage() {
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <div className="flex flex-col space-y-2 text-center">
                         <h1 className="text-2xl font-semibold tracking-tight">
-                            Login to your account
+                            Log in to your account
                         </h1>
                         <p className="text-sm text-muted-foreground">
-                            Enter your email and password below
+                            Enter your credentials to access your workspace
                         </p>
                     </div>
                     <Suspense fallback={<div>Loading...</div>}>

@@ -25,7 +25,13 @@ export function LoginForm() {
 
             <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" name="email" placeholder="m@example.com" required />
+                <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="name@company.com"
+                    required
+                />
             </div>
             <div className="grid gap-2">
                 <div className="flex items-center">
@@ -34,7 +40,7 @@ export function LoginForm() {
                         href="/forgot-password"
                         className="ml-auto inline-block text-sm underline text-muted-foreground hover:text-primary"
                     >
-                        Forgot your password?
+                        Forgot password?
                     </Link>
                 </div>
                 <Input id="password" type="password" name="password" required />
@@ -71,7 +77,7 @@ function LoginButton() {
     return (
         <Button className="w-full mt-4" disabled={pending}>
             {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Log in
+            Sign In
         </Button>
     );
 }

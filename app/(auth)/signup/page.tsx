@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SignupForm } from "@/components/auth/signup-form";
 import { Logo } from "@/components/shared/logo";
+import { Check } from "lucide-react";
 
 export default function SignupPage() {
     return (
@@ -17,33 +18,31 @@ export default function SignupPage() {
                 </div>
 
                 <div className="relative z-20 mt-20">
-                    <h2 className="text-3xl font-bold mb-6">
-                        Join thousands of companies hiring top talent.
-                    </h2>
+                    <h2 className="text-3xl font-bold mb-6">Start hiring with confidence.</h2>
                     <ul className="space-y-4 text-lg/relaxed opacity-90">
                         <li className="flex items-center gap-3">
                             <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
-                                ✓
+                                <Check className="w-4 h-4" />
                             </div>
-                            Post jobs to 50+ boards in one click
+                            Create structured job descriptions
                         </li>
                         <li className="flex items-center gap-3">
                             <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
-                                ✓
+                                <Check className="w-4 h-4" />
                             </div>
-                            AI-powered candidate matching
+                            Screen resumes with AI assistance
                         </li>
                         <li className="flex items-center gap-3">
                             <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
-                                ✓
+                                <Check className="w-4 h-4" />
                             </div>
-                            Automated interview scheduling
+                            Plan interviews and scorecarding
                         </li>
                         <li className="flex items-center gap-3">
                             <div className="h-6 w-6 rounded-full bg-white/20 flex items-center justify-center">
-                                ✓
+                                <Check className="w-4 h-4" />
                             </div>
-                            Collaborative hiring team tools
+                            Make data-driven hiring decisions
                         </li>
                     </ul>
                 </div>
@@ -51,8 +50,9 @@ export default function SignupPage() {
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-2">
                         <p className="text-lg">
-                            &ldquo;This platform has completely transformed how we hire. The AI
-                            matching is incredibly accurate and saves us hours every week.&rdquo;
+                            &ldquo;Oxygenix brings a level of structure and clarity to hiring that
+                            we didn&apos;t know we were missing. concise, effective, and
+                            reliable.&rdquo;
                         </p>
                         <footer className="text-sm">Sofia Davis, HR Director</footer>
                     </blockquote>
@@ -61,9 +61,11 @@ export default function SignupPage() {
             <div className="lg:p-8 flex h-full items-center justify-center">
                 <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                     <div className="flex flex-col space-y-2 text-center">
-                        <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+                        <h1 className="text-2xl font-semibold tracking-tight">
+                            Create your workspace
+                        </h1>
                         <p className="text-sm text-muted-foreground">
-                            Enter your email below to create your account
+                            Get started with a 14-day free trial. No credit card required.
                         </p>
                     </div>
                     <SignupForm />
