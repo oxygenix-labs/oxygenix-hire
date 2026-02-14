@@ -3,26 +3,26 @@ import { AlertCircle, Clock, DollarSign, FileText } from "lucide-react";
 
 const problems = [
     {
-        title: "Resumes exaggerate skills",
+        title: "Bad job descriptions",
         description:
-            "Manual screening misses the truth. Candidates optimize for keywords, not actual ability.",
+            "Vague requirements attract the wrong candidates, wasting your time from the start.",
         icon: FileText,
     },
     {
-        title: "Interviews lack structure",
-        description: "Inconsistent questions lead to biased decisions and missed talent.",
+        title: "Resume screening is subjective",
+        description:
+            "Qualified candidates get rejected because of bias or fatigue, while bad fits slip through.",
         icon: AlertCircle,
     },
     {
-        title: "Decisions rely on gut feeling",
+        title: "Interviews are unstructured",
         description:
-            "Without data, hiring becomes a game of chance rather than a predictable process.",
+            "Different questions for every candidate make it impossible to compare fairly.",
         icon: Clock,
     },
     {
-        title: "Recruiters are expensive",
-        description:
-            "Agency fees eat into your budget. Traditional hiring helps agencies, not you.",
+        title: "Decisions rely on gut feeling",
+        description: "Hiring based on 'vibes' instead of data leads to expensive mistakes.",
         icon: DollarSign,
     },
 ];
@@ -33,11 +33,10 @@ const ProblemSection = () => {
             <div className="container px-4 md:px-6">
                 <div className="text-center mb-16">
                     <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl font-heading">
-                        Hiring is broken.
+                        Hiring is chaotic.
                     </h2>
                     <p className="mt-4 text-xl text-muted-foreground max-w-2xl mx-auto">
-                        Traditional methods aren&apos;t scalable. They are slow, expensive, and
-                        biased.
+                        Most companies struggle with the same painful bottlenecks.
                     </p>
                 </div>
 

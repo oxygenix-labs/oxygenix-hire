@@ -3,34 +3,35 @@ import { Sparkles, Users, GitPullRequest, Calendar, FileCheck, Share2 } from "lu
 
 const features = [
     {
-        title: "Job Posting & Distribution",
-        description: "Post to LinkedIn, Indeed, and more with a single click.",
-        icon: Share2,
-    },
-    {
-        title: "Candidate Management",
-        description: "Centralized database for all your applicants and prospects.",
-        icon: Users,
-    },
-    {
-        title: "Hiring Pipeline",
-        description: "Drag-and-drop Kanban board to visualize your hiring flow.",
-        icon: GitPullRequest,
-    },
-    {
-        title: "AI Resume Screening",
-        description: "Automatically surface the best candidates based on skills.",
+        title: "AI-Assisted Workflows",
+        description:
+            "Intelligent suggestions at every step, from writing JDs to interview questions.",
         icon: Sparkles,
     },
     {
-        title: "Interview Planner",
-        description: "Smart scheduling that syncs with your team's calendars.",
+        title: "Gated Selection Process",
+        description: "Candidates must pass specific criteria to move to the next stage.",
+        icon: FileCheck,
+    },
+    {
+        title: "Full Trackability",
+        description: "See exactly where every candidate is and why they moved forward (or didn't).",
+        icon: Share2,
+    },
+    {
+        title: "Repeatable Playbooks",
+        description: "Standardise your hiring process so every team hires with the same quality.",
+        icon: GitPullRequest,
+    },
+    {
+        title: "Structured Interviews",
+        description: "Pre-generated scorecards ensure every interviewer asks the right questions.",
         icon: Calendar,
     },
     {
-        title: "Offer Generator",
-        description: "Create approved offer templates and track status.",
-        icon: FileCheck,
+        title: "Collaborative Decisions",
+        description: "Gather team feedback in one place to make unbiased hiring decisions.",
+        icon: Users,
     },
 ];
 

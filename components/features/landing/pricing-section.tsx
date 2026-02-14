@@ -54,6 +54,9 @@ const PricingSection = () => {
                     <p className="mt-4 text-xl text-muted-foreground">
                         Choose the plan that&apos;s right for your team.
                     </p>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                        All plans include a 14-day free trial. No credit card required.
+                    </p>
                 </div>
 
                 <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">

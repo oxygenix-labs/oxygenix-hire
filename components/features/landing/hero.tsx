@@ -8,28 +8,31 @@ const Hero = () => {
             <div className="container relative z-10 grid lg:grid-cols-2 gap-12 items-center">
                 {/* Left Column: Text */}
                 <div className="flex flex-col items-start text-left">
+                    <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-primary/10 text-primary mb-4">
+                        This is not an ATS. This is a hiring workflow system.
+                    </div>
                     <h1 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl text-foreground pb-4">
-                        Run hiring like a{" "}
+                        Hiring, turned into a{" "}
                         <span className="bg-gradient-to-r from-primary to-violet-500 bg-clip-text text-transparent">
-                            system
+                            step-by-step workflow
                         </span>
-                        , not guesswork.
+                        .
                     </h1>
 
                     <p className="mt-4 text-xl text-muted-foreground max-w-lg">
-                        All-in-one hiring platform to create jobs, manage candidates, and hire
-                        faster with AI.
+                        A single platform that guides companies through Job Description Creation,
+                        Resume Screening, Interview Planning, and Hiring Decisions.
                     </p>
 
                     <div className="mt-8 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                         <Link href="/signup">
                             <Button size="lg" className="w-full sm:w-auto gap-2">
-                                Try Free <ArrowRight className="h-4 w-4" />
+                                Start Hiring Now <ArrowRight className="h-4 w-4" />
                             </Button>
                         </Link>
                         <Link href="/demo">
                             <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                                View Demo
+                                View Workflow Demo
                             </Button>
                         </Link>
                     </div>
