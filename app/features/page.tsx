@@ -4,7 +4,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Brain, Zap, Users, Shield, TrendingUp, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function FeaturesPage() {
     return (

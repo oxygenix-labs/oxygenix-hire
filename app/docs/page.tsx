@@ -1,6 +1,5 @@
 import Navbar from "@/components/shared/navbar";
 import Footer from "@/components/shared/footer";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, Book, Settings, Code, Zap } from "lucide-react";

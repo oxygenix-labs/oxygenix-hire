@@ -1,7 +1,6 @@
 import Navbar from "@/components/shared/navbar";
 import Footer from "@/components/shared/footer";
 import { Users, Target, Zap, Heart } from "lucide-react";
-import Image from "next/image";
 
 export default function AboutPage() {
     return (
