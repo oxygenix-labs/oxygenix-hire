@@ -23,7 +23,6 @@ import {
     MoreHorizontal,
     Loader2,
     Search,
-    Filter,
     Copy,
     Trash,
     Archive,
@@ -34,7 +33,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { format } from "date-fns";
-import Link from "next/link";
 import { EmptyState } from "@/components/dashboard/empty-state";
 
 interface Job {
