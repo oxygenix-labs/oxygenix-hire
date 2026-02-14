@@ -55,13 +55,13 @@ export default async function JobsPage() {
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Jobs</h1>
                     <p className="text-muted-foreground">
-                        Manage your job postings and applications.
+                        Manage all your open positions and applications in one place.
                     </p>
                 </div>
                 <Link href="/dashboard/jobs/new">
-                    <Button>
+                    <Button title="Create a new job posting">
                         <Plus className="mr-2 h-4 w-4" />
-                        Create Job
+                        Create New Job
                     </Button>
                 </Link>
             </div>

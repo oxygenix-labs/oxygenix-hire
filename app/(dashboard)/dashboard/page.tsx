@@ -1,7 +1,11 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { MetricsCard } from "@/components/dashboard/metrics-cards";
 import { RecentActivity } from "@/components/dashboard/recent-activity";
-import { Briefcase, Users, FileCheck, Calendar } from "lucide-react";
+import { HiringPipeline } from "@/components/dashboard/hiring-pipeline";
+import { MyJobs } from "@/components/dashboard/my-jobs";
+import { Notifications } from "@/components/dashboard/notifications";
+import { Briefcase, Users, Calendar, CheckCircle, PlusCircle } from "lucide-react";
 import Link from "next/link";
 
 async function getDashboardMetrics() {
@@ -11,7 +15,7 @@ async function getDashboardMetrics() {
         activeJobs: 12,
         totalCandidates: 148,
         interviewsScheduled: 8,
-        offersSent: 3,
+        hiresThisMonth: 12, // Replaced offersSent
     };
 }
 
@@ -20,22 +24,40 @@ export default async function DashboardPage() {
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-                <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+            {/* Header & Actions */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+                    <p className="text-muted-foreground">
+                        Here&apos;s a quick overview of your hiring activity.
+                    </p>
+                </div>
+                <div className="flex items-center gap-2">
+                    <Link href="/dashboard/jobs/new">
+                        <Button className="gap-2">
+                            <PlusCircle className="w-4 h-4" />
+                            Create New Job
+                        </Button>
+                    </Link>
+                    <Link href="/dashboard/candidates">
+                        <Button variant="outline">View Candidates</Button>
+                    </Link>
+                </div>
             </div>
 
+            {/* Metrics Grid */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <MetricsCard
                     title="Active Jobs"
                     value={metrics.activeJobs}
-                    description="+2 from last month"
+                    description="Currently open positions"
                     icon={Briefcase}
                     href="/dashboard/jobs"
                 />
                 <MetricsCard
                     title="Total Candidates"
                     value={metrics.totalCandidates}
-                    description="+18% from last month"
+                    description="across all jobs"
                     icon={Users}
                     href="/dashboard/candidates"
                 />
@@ -47,64 +69,40 @@ export default async function DashboardPage() {
                     href="/dashboard/candidates"
                 />
                 <MetricsCard
-                    title="Offers Sent"
-                    value={metrics.offersSent}
-                    description="3 pending acceptance"
-                    icon={FileCheck}
+                    title="Hires This Month"
+                    value={metrics.hiresThisMonth}
+                    description="+2 vs last month"
+                    icon={CheckCircle}
                     href="/dashboard/candidates"
                 />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
-                    <CardHeader>
-                        <CardTitle>Recent Activity</CardTitle>
-                        <CardDescription>
-                            New applicants and interview updates from your team.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                        <RecentActivity />
-                    </CardContent>
-                </Card>
+            {/* Pipeline & Notifications */}
+            <div className="grid gap-6 md:grid-cols-7">
+                <div className="col-span-4 space-y-6">
+                    <HiringPipeline />
+                    <MyJobs />
+                </div>
+                <div className="col-span-3 space-y-6">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Recent Activity</CardTitle>
+                            <CardDescription>Latest updates from your hiring team.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <RecentActivity />
+                        </CardContent>
+                    </Card>
+                    <Notifications />
+                </div>
+            </div>
 
-                <Card className="col-span-3">
-                    <CardHeader>
-                        <CardTitle>Quick Actions</CardTitle>
-                        <CardDescription>
-                            Common tasks to manage your hiring pipeline.
-                        </CardDescription>
-                    </CardHeader>
-                    <CardContent className="grid gap-2">
-                        <Link href="/dashboard/jobs/new">
-                            <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                                <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Post a New Job
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Create a listing and publish to boards.
-                                    </p>
-                                </div>
-                                <Briefcase className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                        </Link>
-
-                        <Link href="/dashboard/candidates">
-                            <div className="flex items-center gap-4 rounded-md border p-4 hover:bg-muted/50 transition-colors cursor-pointer">
-                                <div className="flex-1 space-y-1">
-                                    <p className="text-sm font-medium leading-none">
-                                        Add Candidate
-                                    </p>
-                                    <p className="text-sm text-muted-foreground">
-                                        Manually add a candidate profile.
-                                    </p>
-                                </div>
-                                <Users className="h-4 w-4 text-muted-foreground" />
-                            </div>
-                        </Link>
-                    </CardContent>
-                </Card>
+            <div className="mt-8 text-center text-sm text-muted-foreground">
+                Need help setting up? Check out our{" "}
+                <Link href="#" className="underline">
+                    Getting Started Guide
+                </Link>
+                .
             </div>
         </div>
     );

@@ -47,7 +47,7 @@ export default async function CandidatesPage() {
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">Candidates</h1>
                     <p className="text-muted-foreground">
-                        Detailed view of all applicants across jobs.
+                        Unified view of all applicants across your hiring pipeline.
                     </p>
                 </div>
             </div>
