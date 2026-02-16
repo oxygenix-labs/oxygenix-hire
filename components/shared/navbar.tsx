@@ -29,7 +29,14 @@ const Navbar = () => {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-4"></div>
+                <div className="hidden md:flex items-center gap-4">
+                    <Link href="/login">
+                        <Button variant="ghost">Log in</Button>
+                    </Link>
+                    <Link href="/signup">
+                        <Button>Try Free</Button>
+                    </Link>
+                </div>
                 <Sheet open={isOpen} onOpenChange={setIsOpen}>
                     <SheetTrigger asChild>
                         <Button variant="ghost" size="icon" className="md:hidden">
