@@ -19,6 +19,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -56,6 +66,7 @@ export function TeamList() {
     const [inviteEmail, setInviteEmail] = useState("");
     const [inviteRole, setInviteRole] = useState("member");
     const [isInviting, setIsInviting] = useState(false);
+    const [memberToRemove, setMemberToRemove] = useState<string | null>(null);
 
     const fetchTeam = async () => {
         try {
@@ -104,11 +115,13 @@ export function TeamList() {
         }
     };
 
-    const handleRemove = async (id: string) => {
-        if (!confirm("Are you sure you want to remove this member?")) return;
+    const confirmRemove = async () => {
+        if (!memberToRemove) return;
 
         try {
-            const res = await fetch(`/api/settings/team?id=${id}`, { method: "DELETE" });
+            const res = await fetch(`/api/settings/team?id=${memberToRemove}`, {
+                method: "DELETE",
+            });
             if (!res.ok) throw new Error("Failed to remove");
 
             toast({ title: "Member removed" });
@@ -119,6 +132,8 @@ export function TeamList() {
                 description: "Could not remove member",
                 variant: "destructive",
             });
+        } finally {
+            setMemberToRemove(null);
         }
     };
 
@@ -207,7 +222,7 @@ export function TeamList() {
                                     <Button
                                         variant="ghost"
                                         size="icon"
-                                        onClick={() => handleRemove(member._id)}
+                                        onClick={() => setMemberToRemove(member._id)}
                                     >
                                         <Trash2 className="h-4 w-4 text-muted-foreground hover:text-destructive" />
                                     </Button>
@@ -252,6 +267,30 @@ export function TeamList() {
                     </div>
                 </div>
             )}
+
+            <AlertDialog
+                open={!!memberToRemove}
+                onOpenChange={(open) => !open && setMemberToRemove(null)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Remove Team Member?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Are you sure you want to remove this member from your team? They will
+                            lose access immediately.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmRemove}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Remove
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

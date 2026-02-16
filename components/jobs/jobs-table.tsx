@@ -20,6 +20,16 @@ import {
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
     MoreHorizontal,
     Loader2,
     Search,
@@ -55,6 +65,9 @@ export function JobsTable({ jobs }: JobsTableProps) {
     const [searchQuery, setSearchQuery] = useState("");
     const [statusFilter, setStatusFilter] = useState<"all" | "active" | "draft" | "closed">("all");
 
+    const [jobToDelete, setJobToDelete] = useState<Job | null>(null);
+    const [jobToUpdate, setJobToUpdate] = useState<{ job: Job; status: string } | null>(null);
+
     // Filter jobs based on search and status
     const filteredJobs = jobs.filter((job) => {
         const matchesSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
@@ -62,11 +75,13 @@ export function JobsTable({ jobs }: JobsTableProps) {
         return matchesSearch && matchesStatus;
     });
 
-    const handleStatusChange = async (jobId: string, status: string) => {
-        if (!confirm(`Are you sure you want to change the status to ${status}?`)) return;
+    const confirmStatusChange = async () => {
+        if (!jobToUpdate) return;
+        const { job, status } = jobToUpdate;
+
         try {
-            setIsLoading(jobId);
-            const res = await fetch(`/api/jobs/${jobId}`, {
+            setIsLoading(job._id);
+            const res = await fetch(`/api/jobs/${job._id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ status }),
@@ -79,16 +94,16 @@ export function JobsTable({ jobs }: JobsTableProps) {
             console.error(error);
         } finally {
             setIsLoading(null);
+            setJobToUpdate(null);
         }
     };
 
-    const handleDelete = async (jobId: string) => {
-        if (!confirm("Are you sure you want to delete this job? This action cannot be undone."))
-            return;
+    const confirmDelete = async () => {
+        if (!jobToDelete) return;
 
         try {
-            setIsLoading(jobId);
-            const res = await fetch(`/api/jobs/${jobId}`, {
+            setIsLoading(jobToDelete._id);
+            const res = await fetch(`/api/jobs/${jobToDelete._id}`, {
                 method: "DELETE",
             });
 
@@ -99,6 +114,7 @@ export function JobsTable({ jobs }: JobsTableProps) {
             console.error(error);
         } finally {
             setIsLoading(null);
+            setJobToDelete(null);
         }
     };
 
@@ -275,7 +291,10 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                                 {job.status !== "closed" && (
                                                     <DropdownMenuItem
                                                         onClick={() =>
-                                                            handleStatusChange(job._id, "closed")
+                                                            setJobToUpdate({
+                                                                job,
+                                                                status: "closed",
+                                                            })
                                                         }
                                                     >
                                                         <Archive className="mr-2 h-4 w-4" /> Close
@@ -285,7 +304,10 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                                 {job.status === "closed" && (
                                                     <DropdownMenuItem
                                                         onClick={() =>
-                                                            handleStatusChange(job._id, "active")
+                                                            setJobToUpdate({
+                                                                job,
+                                                                status: "active",
+                                                            })
                                                         }
                                                     >
                                                         <Copy className="mr-2 h-4 w-4" /> Republish
@@ -294,7 +316,7 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                                 <DropdownMenuSeparator />
                                                 <DropdownMenuItem
                                                     className="text-destructive focus:text-destructive"
-                                                    onClick={() => handleDelete(job._id)}
+                                                    onClick={() => setJobToDelete(job)}
                                                 >
                                                     <Trash className="mr-2 h-4 w-4" /> Delete Job
                                                 </DropdownMenuItem>
@@ -311,6 +333,51 @@ export function JobsTable({ jobs }: JobsTableProps) {
             <div className="text-xs text-muted-foreground text-center pt-4">
                 Tip: Archives jobs are hidden from your career page but data is preserved.
             </div>
+
+            <AlertDialog
+                open={!!jobToUpdate}
+                onOpenChange={(open) => !open && setJobToUpdate(null)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will change the status of the job "{jobToUpdate?.job.title}" to{" "}
+                            {jobToUpdate?.status}.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={confirmStatusChange}>
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog
+                open={!!jobToDelete}
+                onOpenChange={(open) => !open && setJobToDelete(null)}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will permanently delete the job "{jobToDelete?.title}" and remove
+                            all data from our servers.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={confirmDelete}
+                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
