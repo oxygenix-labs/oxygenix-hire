@@ -631,9 +631,10 @@ export function CreateJobForm() {
                                                     Responsibilities
                                                 </h3>
                                                 <div
-                                                    className="prose prose-sm max-w-none dark:prose-invert"
+                                                    className="prose prose-sm max-w-none text-muted-foreground"
                                                     dangerouslySetInnerHTML={{
-                                                        __html: form.watch("responsibilities"),
+                                                        __html:
+                                                            form.watch("responsibilities") || "",
                                                     }}
                                                 />
                                             </div>
