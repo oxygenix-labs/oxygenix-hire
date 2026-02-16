@@ -51,13 +51,7 @@ export default async function JobsPage() {
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Jobs</h1>
-                    <p className="text-muted-foreground">
-                        Manage all your open positions and applications in one place.
-                    </p>
-                </div>
+            <div className="flex items-center justify-end">
                 <Link href="/dashboard/jobs/new">
                     <Button title="Create a new job posting">
                         <Plus className="mr-2 h-4 w-4" />

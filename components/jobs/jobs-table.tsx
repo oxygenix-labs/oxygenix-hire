@@ -263,10 +263,13 @@ export function JobsTable({ jobs }: JobsTableProps) {
                                                     <Edit className="mr-2 h-4 w-4" /> Edit Job
                                                 </DropdownMenuItem>
                                                 <DropdownMenuItem
-                                                    onClick={() => router.push(`/jobs/${job._id}`)}
+                                                    onClick={() =>
+                                                        router.push(
+                                                            `/dashboard/jobs/${job._id}/workflow`
+                                                        )
+                                                    }
                                                 >
-                                                    <Share className="mr-2 h-4 w-4" /> View Live
-                                                    Page
+                                                    <Share className="mr-2 h-4 w-4" /> View Workflow
                                                 </DropdownMenuItem>
                                                 <DropdownMenuSeparator />
                                                 {job.status !== "closed" && (

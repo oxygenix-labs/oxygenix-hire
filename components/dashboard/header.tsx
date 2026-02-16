@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Logo } from "@/components/shared/logo";
 
@@ -56,20 +56,7 @@ export function Header() {
                     </nav>
                 </SheetContent>
             </Sheet>
-            <div className="w-full flex-1">
-                {!isWorkflowPage && (
-                    <form>
-                        <div className="relative">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input
-                                type="search"
-                                placeholder="Search..."
-                                className="w-full appearance-none bg-background pl-8 shadow-none md:w-2/3 lg:w-1/3"
-                            />
-                        </div>
-                    </form>
-                )}
-            </div>
+            <div className="w-full flex-1"></div>
             {/* User menu removed from here and moved to sidebar */}
         </header>
     );

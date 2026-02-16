@@ -43,15 +43,6 @@ export default async function CandidatesPage() {
 
     return (
         <div className="flex flex-col gap-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold tracking-tight">Candidates</h1>
-                    <p className="text-muted-foreground">
-                        Unified view of all applicants across your hiring pipeline.
-                    </p>
-                </div>
-            </div>
-
             <CandidatesTable candidates={candidates} />
         </div>
     );
