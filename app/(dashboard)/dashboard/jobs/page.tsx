@@ -52,8 +52,8 @@ export default async function JobsPage() {
     return (
         <div className="flex flex-col gap-6">
             <div className="flex items-center justify-end">
-                <Link href="/dashboard/jobs/new">
-                    <Button title="Create a new job posting">
+                <Link href="/dashboard/jobs/new" className="w-full sm:w-auto">
+                    <Button title="Create a new job posting" className="w-full sm:w-auto">
                         <Plus className="mr-2 h-4 w-4" />
                         Create New Job
                     </Button>
