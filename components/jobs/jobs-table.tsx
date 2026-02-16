@@ -175,209 +175,222 @@ export function JobsTable({ jobs }: JobsTableProps) {
             </div>
 
             {/* Table */}
-            <div className="rounded-md border">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[300px]">Job Title</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Applicants</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead>Date Posted</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {filteredJobs.length === 0 ? (
+            <div className="rounded-md border overflow-hidden">
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
                             <TableRow>
-                                <TableCell colSpan={6} className="h-64 text-center">
-                                    <div className="flex flex-col items-center justify-center space-y-2">
-                                        <Search className="h-8 w-8 text-muted-foreground" />
-                                        <p className="text-lg font-medium">No results found</p>
-                                        <p className="text-sm text-muted-foreground">
-                                            Try adjusting your search or filters.
-                                        </p>
-                                        <Button
-                                            variant="link"
-                                            onClick={() => {
-                                                setSearchQuery("");
-                                                setStatusFilter("all");
-                                            }}
-                                        >
-                                            Clear filters
-                                        </Button>
-                                    </div>
-                                </TableCell>
+                                <TableHead className="w-[300px] min-w-[200px]">Job Title</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Applicants</TableHead>
+                                <TableHead className="hidden md:table-cell">Location</TableHead>
+                                <TableHead className="hidden md:table-cell">Date Posted</TableHead>
+                                <TableHead className="text-right">Actions</TableHead>
                             </TableRow>
-                        ) : (
-                            filteredJobs.map((job) => (
-                                <TableRow key={job._id}>
-                                    <TableCell>
-                                        <div className="font-medium text-base">{job.title}</div>
-                                        <div className="text-xs text-muted-foreground mt-0.5">
-                                            {job.type} • {job.location}
+                        </TableHeader>
+                        <TableBody>
+                            {filteredJobs.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-64 text-center">
+                                        <div className="flex flex-col items-center justify-center space-y-2">
+                                            <Search className="h-8 w-8 text-muted-foreground" />
+                                            <p className="text-lg font-medium">No results found</p>
+                                            <p className="text-sm text-muted-foreground">
+                                                Try adjusting your search or filters.
+                                            </p>
+                                            <Button
+                                                variant="link"
+                                                onClick={() => {
+                                                    setSearchQuery("");
+                                                    setStatusFilter("all");
+                                                }}
+                                            >
+                                                Clear filters
+                                            </Button>
                                         </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge
-                                            variant={
-                                                job.status === "active"
-                                                    ? "default"
-                                                    : job.status === "draft"
-                                                      ? "secondary"
-                                                      : "outline"
-                                            }
-                                            className="capitalize"
-                                        >
-                                            {job.status === "active" ? "Published" : job.status}
-                                        </Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex items-center gap-2">
-                                            <span className="font-medium">
-                                                {job.applicantsCount}
-                                            </span>
-                                            <span className="text-xs text-muted-foreground">
-                                                candidates
-                                            </span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground text-sm">
-                                        {job.location}
-                                    </TableCell>
-                                    <TableCell className="text-muted-foreground text-sm">
-                                        {format(new Date(job.createdAt), "MMM d, yyyy")}
-                                    </TableCell>
-                                    <TableCell className="text-right">
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <Button variant="ghost" className="h-8 w-8 p-0">
-                                                    <span className="sr-only">Open menu</span>
-                                                    {isLoading === job._id ? (
-                                                        <Loader2 className="h-4 w-4 animate-spin" />
-                                                    ) : (
-                                                        <MoreHorizontal className="h-4 w-4" />
-                                                    )}
-                                                </Button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" className="w-[160px]">
-                                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        router.push(`/dashboard/jobs/${job._id}`)
-                                                    }
-                                                >
-                                                    <Eye className="mr-2 h-4 w-4" /> View Job
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        router.push(
-                                                            `/dashboard/jobs/${job._id}/edit`
-                                                        )
-                                                    }
-                                                >
-                                                    <Edit className="mr-2 h-4 w-4" /> Edit Job
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() =>
-                                                        router.push(
-                                                            `/dashboard/jobs/${job._id}/workflow`
-                                                        )
-                                                    }
-                                                >
-                                                    <Share className="mr-2 h-4 w-4" /> View Workflow
-                                                </DropdownMenuItem>
-                                                <DropdownMenuSeparator />
-                                                {job.status !== "closed" && (
-                                                    <DropdownMenuItem
-                                                        onClick={() =>
-                                                            setJobToUpdate({
-                                                                job,
-                                                                status: "closed",
-                                                            })
-                                                        }
-                                                    >
-                                                        <Archive className="mr-2 h-4 w-4" /> Close
-                                                        Job
-                                                    </DropdownMenuItem>
-                                                )}
-                                                {job.status === "closed" && (
-                                                    <DropdownMenuItem
-                                                        onClick={() =>
-                                                            setJobToUpdate({
-                                                                job,
-                                                                status: "active",
-                                                            })
-                                                        }
-                                                    >
-                                                        <Copy className="mr-2 h-4 w-4" /> Republish
-                                                    </DropdownMenuItem>
-                                                )}
-                                                <DropdownMenuSeparator />
-                                                <DropdownMenuItem
-                                                    className="text-destructive focus:text-destructive"
-                                                    onClick={() => setJobToDelete(job)}
-                                                >
-                                                    <Trash className="mr-2 h-4 w-4" /> Delete Job
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
                                     </TableCell>
                                 </TableRow>
-                            ))
-                        )}
-                    </TableBody>
-                </Table>
+                            ) : (
+                                filteredJobs.map((job) => (
+                                    <TableRow key={job._id}>
+                                        <TableCell>
+                                            <div className="font-medium text-base">{job.title}</div>
+                                            <div className="text-xs text-muted-foreground mt-0.5 md:hidden">
+                                                {job.type} • {job.location}
+                                            </div>
+                                            <div className="text-xs text-muted-foreground mt-0.5 hidden md:block">
+                                                {job.type}
+                                            </div>
+                                        </TableCell>
+                                        <TableCell>
+                                            <Badge
+                                                variant={
+                                                    job.status === "active"
+                                                        ? "default"
+                                                        : job.status === "draft"
+                                                          ? "secondary"
+                                                          : "outline"
+                                                }
+                                                className="capitalize"
+                                            >
+                                                {job.status === "active" ? "Published" : job.status}
+                                            </Badge>
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-medium">
+                                                    {job.applicantsCount}
+                                                </span>
+                                                <span className="text-xs text-muted-foreground hidden sm:inline">
+                                                    candidates
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
+                                            {job.location}
+                                        </TableCell>
+                                        <TableCell className="text-muted-foreground text-sm hidden md:table-cell">
+                                            {format(new Date(job.createdAt), "MMM d, yyyy")}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                                        <span className="sr-only">Open menu</span>
+                                                        {isLoading === job._id ? (
+                                                            <Loader2 className="h-4 w-4 animate-spin" />
+                                                        ) : (
+                                                            <MoreHorizontal className="h-4 w-4" />
+                                                        )}
+                                                    </Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent
+                                                    align="end"
+                                                    className="w-[160px]"
+                                                >
+                                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/dashboard/jobs/${job._id}`
+                                                            )
+                                                        }
+                                                    >
+                                                        <Eye className="mr-2 h-4 w-4" /> View Job
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/dashboard/jobs/${job._id}/edit`
+                                                            )
+                                                        }
+                                                    >
+                                                        <Edit className="mr-2 h-4 w-4" /> Edit Job
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuItem
+                                                        onClick={() =>
+                                                            router.push(
+                                                                `/dashboard/jobs/${job._id}/workflow`
+                                                            )
+                                                        }
+                                                    >
+                                                        <Share className="mr-2 h-4 w-4" /> View
+                                                        Workflow
+                                                    </DropdownMenuItem>
+                                                    <DropdownMenuSeparator />
+                                                    {job.status !== "closed" && (
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setJobToUpdate({
+                                                                    job,
+                                                                    status: "closed",
+                                                                })
+                                                            }
+                                                        >
+                                                            <Archive className="mr-2 h-4 w-4" />{" "}
+                                                            Close Job
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    {job.status === "closed" && (
+                                                        <DropdownMenuItem
+                                                            onClick={() =>
+                                                                setJobToUpdate({
+                                                                    job,
+                                                                    status: "active",
+                                                                })
+                                                            }
+                                                        >
+                                                            <Copy className="mr-2 h-4 w-4" />{" "}
+                                                            Republish
+                                                        </DropdownMenuItem>
+                                                    )}
+                                                    <DropdownMenuSeparator />
+                                                    <DropdownMenuItem
+                                                        className="text-destructive focus:text-destructive"
+                                                        onClick={() => setJobToDelete(job)}
+                                                    >
+                                                        <Trash className="mr-2 h-4 w-4" /> Delete
+                                                        Job
+                                                    </DropdownMenuItem>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                <div className="text-xs text-muted-foreground text-center pt-4">
+                    Tip: Archives jobs are hidden from your career page but data is preserved.
+                </div>
+
+                <AlertDialog
+                    open={!!jobToUpdate}
+                    onOpenChange={(open) => !open && setJobToUpdate(null)}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will change the status of the job "{jobToUpdate?.job.title}" to{" "}
+                                {jobToUpdate?.status}.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={confirmStatusChange}>
+                                Continue
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+
+                <AlertDialog
+                    open={!!jobToDelete}
+                    onOpenChange={(open) => !open && setJobToDelete(null)}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                This will permanently delete the job "{jobToDelete?.title}" and
+                                remove all data from our servers.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                onClick={confirmDelete}
+                                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                            >
+                                Delete
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </div>
-
-            <div className="text-xs text-muted-foreground text-center pt-4">
-                Tip: Archives jobs are hidden from your career page but data is preserved.
-            </div>
-
-            <AlertDialog
-                open={!!jobToUpdate}
-                onOpenChange={(open) => !open && setJobToUpdate(null)}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This will change the status of the job "{jobToUpdate?.job.title}" to{" "}
-                            {jobToUpdate?.status}.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={confirmStatusChange}>
-                            Continue
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
-            <AlertDialog
-                open={!!jobToDelete}
-                onOpenChange={(open) => !open && setJobToDelete(null)}
-            >
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                            This will permanently delete the job "{jobToDelete?.title}" and remove
-                            all data from our servers.
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                            onClick={confirmDelete}
-                            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                        >
-                            Delete
-                        </AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </div>
     );
 }
