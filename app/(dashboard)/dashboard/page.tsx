@@ -78,12 +78,12 @@ export default async function DashboardPage() {
             </div>
 
             {/* Pipeline & Notifications */}
-            <div className="grid gap-6 md:grid-cols-7">
-                <div className="col-span-4 space-y-6">
+            <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
+                <div className="col-span-1 lg:col-span-4 space-y-6">
                     <HiringPipeline />
                     <MyJobs />
                 </div>
-                <div className="col-span-3 space-y-6">
+                <div className="col-span-1 lg:col-span-3 space-y-6">
                     <Card>
                         <CardHeader>
                             <CardTitle>Recent Activity</CardTitle>

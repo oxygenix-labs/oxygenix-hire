@@ -393,8 +393,8 @@ export function CreateJobForm() {
                     )}
                 />
 
-                <div className="flex items-center gap-4 pt-4">
-                    <Button type="submit" disabled={isLoading}>
+                <div className="flex flex-col-reverse sm:flex-row items-center gap-4 pt-4">
+                    <Button type="submit" disabled={isLoading} className="w-full sm:w-auto">
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         Create Job Post
                     </Button>
@@ -406,6 +406,7 @@ export function CreateJobForm() {
                             form.handleSubmit(onSubmit)();
                         }}
                         disabled={isLoading}
+                        className="w-full sm:w-auto"
                     >
                         Save as Draft
                     </Button>
@@ -414,7 +415,7 @@ export function CreateJobForm() {
                         variant="outline"
                         onClick={() => setPreviewOpen(true)}
                         disabled={!form.watch("title") || !form.watch("description")}
-                        className="gap-2"
+                        className="w-full sm:w-auto gap-2 sm:ml-auto"
                     >
                         <Eye className="h-4 w-4" />
                         Preview
@@ -424,202 +425,250 @@ export function CreateJobForm() {
 
             {/* AI Modal */}
             <Dialog open={aiOpen} onOpenChange={setAiOpen}>
-                <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                        <DialogTitle>Choose AI Provider & Prompt Style</DialogTitle>
-                        <DialogDescription>
-                            Select your preferred AI model and how you want it to write the Job
-                            Description.
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    {/* LLM Provider Selector */}
-                    <div className="space-y-3 pb-4 border-b">
-                        <label className="text-sm font-medium flex items-center gap-2">
-                            <Cpu className="h-4 w-4" />
-                            AI Provider
-                        </label>
-                        <div className="grid grid-cols-2 gap-3">
-                            <div
-                                onClick={() => setSelectedProvider("openai")}
-                                className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
-                                    selectedProvider === "openai"
-                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                        : ""
-                                }`}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <div className="flex-1">
-                                        <div className="font-semibold text-sm">OpenAI</div>
-                                        <p className="text-xs text-muted-foreground">GPT-4o Mini</p>
-                                    </div>
-                                    {selectedProvider === "openai" && (
-                                        <Check className="h-4 w-4 text-primary" />
-                                    )}
-                                </div>
-                            </div>
-                            <div
-                                onClick={() => setSelectedProvider("gemini")}
-                                className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
-                                    selectedProvider === "gemini"
-                                        ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                        : ""
-                                }`}
-                            >
-                                <div className="flex items-center gap-2">
-                                    <div className="flex-1">
-                                        <div className="font-semibold text-sm">Google Gemini</div>
-                                        <p className="text-xs text-muted-foreground">
-                                            Gemini 1.5 Flash
-                                        </p>
-                                    </div>
-                                    {selectedProvider === "gemini" && (
-                                        <Check className="h-4 w-4 text-primary" />
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col p-0 gap-0">
+                    <div className="p-6 border-b">
+                        <DialogHeader>
+                            <DialogTitle>Choose AI Provider & Prompt Style</DialogTitle>
+                            <DialogDescription>
+                                Select your preferred AI model and how you want it to write the Job
+                                Description.
+                            </DialogDescription>
+                        </DialogHeader>
                     </div>
 
-                    {/* Prompt Style Selector */}
-                    <div className="space-y-3">
-                        <label className="text-sm font-medium">Prompt Style</label>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
-                            {promptOptions.map((option) => (
+                    <div className="flex-1 overflow-y-auto p-6">
+                        {/* LLM Provider Selector */}
+                        <div className="space-y-3 pb-4 border-b">
+                            <label className="text-sm font-medium flex items-center gap-2">
+                                <Cpu className="h-4 w-4" />
+                                AI Provider
+                            </label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 <div
-                                    key={option.id}
-                                    onClick={() => setSelectedPrompt(option.id)}
-                                    className={`cursor-pointer border rounded-lg p-4 transition-all hover:border-primary hover:bg-muted/50 ${selectedPrompt === option.id ? "border-primary bg-primary/5 ring-1 ring-primary" : ""}`}
+                                    onClick={() => setSelectedProvider("openai")}
+                                    className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
+                                        selectedProvider === "openai"
+                                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                            : ""
+                                    }`}
                                 >
-                                    <div className="flex items-start gap-3">
-                                        <div className="text-2xl">{option.icon}</div>
-                                        <div className="space-y-1">
-                                            <div className="font-semibold">{option.title}</div>
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex-1">
+                                            <div className="font-semibold text-sm">OpenAI</div>
                                             <p className="text-xs text-muted-foreground">
-                                                {option.description}
+                                                GPT-4o Mini
                                             </p>
                                         </div>
-                                        {selectedPrompt === option.id && (
-                                            <Check className="ml-auto h-4 w-4 text-primary" />
+                                        {selectedProvider === "openai" && (
+                                            <Check className="h-4 w-4 text-primary" />
                                         )}
                                     </div>
                                 </div>
-                            ))}
+                                <div
+                                    onClick={() => setSelectedProvider("gemini")}
+                                    className={`cursor-pointer border rounded-lg p-3 transition-all hover:border-primary hover:bg-muted/50 ${
+                                        selectedProvider === "gemini"
+                                            ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                            : ""
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex-1">
+                                            <div className="font-semibold text-sm">
+                                                Google Gemini
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">
+                                                Gemini 1.5 Flash
+                                            </p>
+                                        </div>
+                                        {selectedProvider === "gemini" && (
+                                            <Check className="h-4 w-4 text-primary" />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Prompt Style Selector */}
+                        <div className="space-y-3 pt-4">
+                            <label className="text-sm font-medium">Prompt Style</label>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {promptOptions.map((option) => (
+                                    <div
+                                        key={option.id}
+                                        onClick={() => setSelectedPrompt(option.id)}
+                                        className={`cursor-pointer border rounded-lg p-4 transition-all hover:border-primary hover:bg-muted/50 ${
+                                            selectedPrompt === option.id
+                                                ? "border-primary bg-primary/5 ring-1 ring-primary"
+                                                : ""
+                                        }`}
+                                    >
+                                        <div className="flex items-start gap-3">
+                                            <div className="text-2xl">{option.icon}</div>
+                                            <div className="space-y-1">
+                                                <div className="font-semibold">{option.title}</div>
+                                                <p className="text-xs text-muted-foreground">
+                                                    {option.description}
+                                                </p>
+                                            </div>
+                                            {selectedPrompt === option.id && (
+                                                <Check className="ml-auto h-4 w-4 text-primary" />
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setAiOpen(false)}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleGenerate} disabled={!selectedPrompt || isGenerating}>
-                            {isGenerating ? (
-                                <>
-                                    <Wand2 className="mr-2 h-4 w-4 animate-spin" />
-                                    Generating...
-                                </>
-                            ) : (
-                                <>
-                                    <Wand2 className="mr-2 h-4 w-4" />
-                                    Generate Draft
-                                </>
-                            )}
-                        </Button>
-                    </DialogFooter>
+                    <div className="p-6 border-t mt-auto">
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setAiOpen(false)}>
+                                Cancel
+                            </Button>
+                            <Button
+                                onClick={handleGenerate}
+                                disabled={!selectedPrompt || isGenerating}
+                            >
+                                {isGenerating ? (
+                                    <>
+                                        <Wand2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Generating...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Wand2 className="mr-2 h-4 w-4" />
+                                        Generate Draft
+                                    </>
+                                )}
+                            </Button>
+                        </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
 
             {/* Preview Modal */}
             <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                        <DialogTitle>Job Post Preview</DialogTitle>
-                        <DialogDescription>
-                            This is how your job posting will appear to candidates.
-                        </DialogDescription>
-                    </DialogHeader>
-
-                    <div className="space-y-6 py-4">
-                        {/* Job Header */}
-                        <div className="space-y-2">
-                            <h1 className="text-3xl font-bold">
-                                {form.watch("title") || "Job Title"}
-                            </h1>
-                            <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                                <div className="flex items-center gap-1">
-                                    <span className="font-medium">Location:</span>
-                                    <span>{form.watch("location") || "Not specified"}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                    <span className="font-medium">Type:</span>
-                                    <span>{form.watch("type") || "Full-time"}</span>
-                                </div>
-                                {form.watch("experienceLevel") && (
-                                    <div className="flex items-center gap-1">
-                                        <span className="font-medium">Level:</span>
-                                        <span>{form.watch("experienceLevel")}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* Job Description */}
-                        <Card>
-                            <CardContent className="pt-6">
-                                <div
-                                    className="prose prose-sm max-w-none dark:prose-invert"
-                                    dangerouslySetInnerHTML={{
-                                        __html:
-                                            form.watch("description") ||
-                                            "<p>No description available</p>",
-                                    }}
-                                />
-                            </CardContent>
-                        </Card>
-
-                        {/* Additional Info */}
-                        {(form.watch("skills") ||
-                            form.watch("responsibilities") ||
-                            form.watch("companyContext")) && (
-                            <Card className="bg-muted/30">
-                                <CardContent className="pt-6 space-y-4">
-                                    {form.watch("skills") && (
-                                        <div>
-                                            <h3 className="font-semibold mb-2">Required Skills</h3>
-                                            <div className="flex flex-wrap gap-2">
-                                                {form
-                                                    .watch("skills")
-                                                    ?.split(",")
-                                                    .map((skill, i) => (
-                                                        <span
-                                                            key={i}
-                                                            className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
-                                                        >
-                                                            {skill.trim()}
-                                                        </span>
-                                                    ))}
-                                            </div>
-                                        </div>
-                                    )}
-                                </CardContent>
-                            </Card>
-                        )}
+                <DialogContent className="w-[95vw] max-w-4xl max-h-[90vh] flex flex-col p-0 gap-0">
+                    <div className="p-4 sm:p-6 border-b">
+                        <DialogHeader>
+                            <DialogTitle>Job Post Preview</DialogTitle>
+                            <DialogDescription>
+                                This is how your job posting will appear to candidates.
+                            </DialogDescription>
+                        </DialogHeader>
                     </div>
 
-                    <DialogFooter>
-                        <Button variant="outline" onClick={() => setPreviewOpen(false)}>
-                            Close
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                setPreviewOpen(false);
-                                // Optionally scroll to top or focus on submit button
-                            }}
-                        >
-                            Looks Good, Continue
-                        </Button>
-                    </DialogFooter>
+                    <div className="flex-1 overflow-y-auto p-4 sm:p-6">
+                        <div className="space-y-6">
+                            {/* Job Header */}
+                            <div className="space-y-2">
+                                <h1 className="text-3xl font-bold">
+                                    {form.watch("title") || "Job Title"}
+                                </h1>
+                                <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                                    <div className="flex items-center gap-1">
+                                        <span className="font-medium">Location:</span>
+                                        <span>{form.watch("location") || "Not specified"}</span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <span className="font-medium">Type:</span>
+                                        <span>{form.watch("type") || "Full-time"}</span>
+                                    </div>
+                                    {form.watch("experienceLevel") && (
+                                        <div className="flex items-center gap-1">
+                                            <span className="font-medium">Level:</span>
+                                            <span>{form.watch("experienceLevel")}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Job Description */}
+                            <Card>
+                                <CardContent className="pt-6">
+                                    <div
+                                        className="prose prose-sm max-w-none dark:prose-invert"
+                                        dangerouslySetInnerHTML={{
+                                            __html:
+                                                form.watch("description") ||
+                                                "<p>No description available</p>",
+                                        }}
+                                    />
+                                </CardContent>
+                            </Card>
+
+                            {/* Additional Info */}
+                            {(form.watch("skills") ||
+                                form.watch("responsibilities") ||
+                                form.watch("companyContext")) && (
+                                <Card className="bg-muted/30">
+                                    <CardContent className="pt-6 space-y-4">
+                                        {form.watch("skills") && (
+                                            <div>
+                                                <h3 className="font-semibold mb-2">
+                                                    Required Skills
+                                                </h3>
+                                                <div className="flex flex-wrap gap-2">
+                                                    {form
+                                                        .watch("skills")
+                                                        ?.split(",")
+                                                        .map((skill, i) => (
+                                                            <span
+                                                                key={i}
+                                                                className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm"
+                                                            >
+                                                                {skill.trim()}
+                                                            </span>
+                                                        ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {form.watch("responsibilities") && (
+                                            <div>
+                                                <h3 className="font-semibold mb-2">
+                                                    Responsibilities
+                                                </h3>
+                                                <div
+                                                    className="prose prose-sm max-w-none dark:prose-invert"
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: form.watch("responsibilities"),
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                        {form.watch("companyContext") && (
+                                            <div>
+                                                <h3 className="font-semibold mb-2">
+                                                    About Our Company
+                                                </h3>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {form.watch("companyContext")}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="p-4 sm:p-6 border-t mt-auto">
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setPreviewOpen(false)}>
+                                Close
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setPreviewOpen(false);
+                                    // Optionally scroll to top or focus on submit button
+                                }}
+                            >
+                                Looks Good, Continue
+                            </Button>
+                        </DialogFooter>
+                    </div>
                 </DialogContent>
             </Dialog>
         </Form>

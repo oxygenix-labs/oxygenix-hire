@@ -8,9 +8,9 @@ export function RecentActivity() {
                     <AvatarImage src="/avatars/01.png" alt="Avatar" />
                     <AvatarFallback>OM</AvatarFallback>
                 </Avatar>
-                <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Olivia Martin</p>
-                    <p className="text-sm text-muted-foreground">
+                <div className="ml-4 space-y-1 min-w-0 flex-1">
+                    <p className="text-sm font-medium leading-none truncate">Olivia Martin</p>
+                    <p className="text-sm text-muted-foreground truncate">
                         New candidate applied for &quot;Frontend Engineer&quot;
                     </p>
                 </div>
@@ -21,9 +21,9 @@ export function RecentActivity() {
                     <AvatarImage src="/avatars/02.png" alt="Avatar" />
                     <AvatarFallback>JL</AvatarFallback>
                 </Avatar>
-                <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Jackson Lee</p>
-                    <p className="text-sm text-muted-foreground">
+                <div className="ml-4 space-y-1 min-w-0 flex-1">
+                    <p className="text-sm font-medium leading-none truncate">Jackson Lee</p>
+                    <p className="text-sm text-muted-foreground truncate">
                         Interview scheduled for &quot;John Doe&quot;
                     </p>
                 </div>
@@ -34,9 +34,9 @@ export function RecentActivity() {
                     <AvatarImage src="/avatars/03.png" alt="Avatar" />
                     <AvatarFallback>IN</AvatarFallback>
                 </Avatar>
-                <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Isabella Nguyen</p>
-                    <p className="text-sm text-muted-foreground">
+                <div className="ml-4 space-y-1 min-w-0 flex-1">
+                    <p className="text-sm font-medium leading-none truncate">Isabella Nguyen</p>
+                    <p className="text-sm text-muted-foreground truncate">
                         Offer sent to &quot;Jane Smith&quot;
                     </p>
                 </div>
